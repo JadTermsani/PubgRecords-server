@@ -16,4 +16,8 @@ module.exports = class PubgAPI extends RESTDataSource {
       `/shards/${region}/players?filter[playerNames]=${playerName}`
     );
   }
+
+  async getMatch(region, matchId) {
+    return this.get(`/shards/${region}/matches/${matchId}`);
+  }
 };

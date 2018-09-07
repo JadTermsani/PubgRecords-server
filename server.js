@@ -3,6 +3,17 @@ const express = require('express');
 const app = express();
 const axios = require('axios');
 const cors = require('cors');
+const { resolvers, typeDefs } = require('./schema');
+const { ApolloServer } = require('apollo-server-express');
+const PubgAPI = require('./pubg-api');
+
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  dataSources: () => ({ pubgAPI: new PubgAPI() })
+});
+
+server.applyMiddleware({ app, path: '/api/graphql' });
 
 const API_KEY = process.env.API_KEY;
 

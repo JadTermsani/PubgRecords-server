@@ -26,6 +26,7 @@ const typeDefs = gql`
       matchesId: [String!]!
       playerId: String!
     ): [MatchInfo]
+    playerId(region: String!, playerName: String!): ID!
   }
 `;
 
@@ -92,6 +93,18 @@ const getMatchInfo = async ({ dataSources, region, matchId, playerId }) => {
 
 const resolvers = {
   Query: {
+    playerId: async (root, { region, playerName }, { dataSources }) => {
+      const information = await dataSources.pubgAPI.getPlayerGames(
+        region,
+        playerName
+      );
+
+      const playerInfo = head(information.data);
+
+      const { id } = playerInfo;
+
+      return id;
+    },
     playerGames: async (root, { region, playerName }, { dataSources }) => {
       const information = await dataSources.pubgAPI.getPlayerGames(
         region,

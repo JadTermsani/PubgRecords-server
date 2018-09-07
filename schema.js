@@ -15,13 +15,80 @@ const typeDefs = gql`
     mapName: String
     teams: Int
     participants: Int
+    rank: Int
   }
 
   type Query {
     playerGames(region: String!, playerName: String!): [PlayerGame]
     matchInfo(region: String!, matchId: String!, playerId: String!): MatchInfo
+    matchesInfo(
+      region: String!
+      matchesId: [String!]!
+      playerId: String!
+    ): [MatchInfo]
   }
 `;
+
+const getMatchInfo = async ({ dataSources, region, matchId, playerId }) => {
+  const matchInfo = await dataSources.pubgAPI.getMatch(region, matchId);
+  const matchData = JSON.parse(matchInfo);
+  const {
+    included,
+    data: {
+      attributes: { createdAt, duration, gameMode, mapName }
+    }
+  } = matchData;
+
+  let [date, time] = createdAt.split('T');
+  time = time.slice(0, -1);
+
+  const [participantsList, rest] = partition(included, ['type', 'participant']);
+  const rosters = head(partition(rest, ['type', 'roster']));
+
+  const participant = find(
+    participantsList,
+    ({
+      attributes: {
+        stats: { playerId: id }
+      }
+    }) => id === playerId
+  );
+
+  const {
+    id: participantId,
+    attributes: {
+      stats: { winPlace: rank }
+    }
+  } = participant;
+
+  const teamIds = find(
+    rosters,
+    ({
+      relationships: {
+        participants: { data: teamIds }
+      }
+    }) => !!find(teamIds, ({ id }) => id === participantId)
+  ).relationships.participants.data;
+
+  const teamStats = filter(
+    participantsList,
+    ({ id }) => !!find(teamIds, ({ id: teamId }) => teamId === id)
+  );
+
+  const teams = rosters.length;
+  const participants = participantsList.length;
+
+  return {
+    date,
+    time,
+    duration,
+    gameMode,
+    mapName,
+    teams,
+    participants,
+    rank
+  };
+};
 
 const resolvers = {
   Query: {
@@ -41,61 +108,16 @@ const resolvers = {
 
       return matchesArray;
     },
-    matchInfo: async (root, { region, matchId, playerId }, { dataSources }) => {
-      const matchInfo = await dataSources.pubgAPI.getMatch(region, matchId);
-      const matchData = JSON.parse(matchInfo);
-      const {
-        included,
-        data: {
-          attributes: { createdAt, duration, gameMode, mapName }
-        }
-      } = matchData;
-
-      let [date, time] = createdAt.split('T');
-      time = time.slice(0, -1);
-
-      const [participantsList, rest] = partition(included, [
-        'type',
-        'participant'
-      ]);
-      const rosters = head(partition(rest, ['type', 'roster']));
-
-      const participantId = find(
-        participantsList,
-        ({
-          attributes: {
-            stats: { playerId: id }
-          }
-        }) => id === playerId
-      ).id;
-
-      const teamIds = find(
-        rosters,
-        ({
-          relationships: {
-            participants: { data: teamIds }
-          }
-        }) => !!find(teamIds, ({ id }) => id === participantId)
-      ).relationships.participants.data;
-
-      const teamStats = filter(
-        participantsList,
-        ({ id }) => !!find(teamIds, ({ id: teamId }) => teamId === id)
-      );
-
-      const teams = rosters.length;
-      const participants = participantsList.length;
-
-      return {
-        date,
-        time,
-        duration,
-        gameMode,
-        mapName,
-        teams,
-        participants
-      };
-    }
+    matchInfo: async (root, { region, matchId, playerId }, { dataSources }) =>
+      getMatchInfo({ dataSources, region, matchId, playerId }),
+    matchesInfo: async (
+      root,
+      { region, matchesId, playerId },
+      { dataSources }
+    ) =>
+      matchesId.map(matchId =>
+        getMatchInfo({ dataSources, region, matchId, playerId })
+      )
   }
 };
 

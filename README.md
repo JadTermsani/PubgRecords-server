@@ -5,13 +5,13 @@ This is currently deployed on heroku and serves as a proxy between the [PUBG API
 ## To Run locally
 
 ```
-npm install
+yarn
 ```
 
 Rename `.env.example` to `.env` and include your own API Key that you can get from [here](https://developer.playbattlegrounds.com/).
 
 ```
-npm start
+yarn start
 ```
 
 Go to `http://localhost:3001/`

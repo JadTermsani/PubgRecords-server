@@ -1,4 +1,4 @@
-require('dotenv').config({ path: 'keys.env' });
+require('dotenv').config({ path: '.env' });
 const express = require('express');
 const app = express();
 const axios = require('axios');

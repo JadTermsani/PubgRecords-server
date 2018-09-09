@@ -1,0 +1,23 @@
+{
+  "projectName": "PubgRecords-server",
+  "projectOwner": "JadTermsani",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "contributors": [
+    {
+      "login": "Faultless",
+      "name": "Serge Kamel",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/7265811?v=4",
+      "profile": "https://github.com/Faultless",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    }
+  ]
+}

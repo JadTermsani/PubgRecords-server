@@ -8,14 +8,33 @@ const typeDefs = gql`
   }
 
   type MatchInfo {
+    name: String
+    playerId: String
     date: String
     time: String
-    duration: String
+    matchDuration: Int
     gameMode: String
     mapName: String
     teams: Int
     participants: Int
     rank: Int
+    kills: Int
+    assists: Int
+    DBNOs: Int
+    boosts: Int
+    allHeals: Int
+    damage: Int
+    headshotKills: Int
+    killPlace: Int
+    longestKill: Int
+    revives: Int
+    rideDistance: Int
+    roadKills: Int
+    swimDistance: Int
+    teamKills: Int
+    timeSurvived: Int
+    vehiclesDestroyed: Int
+    walkDistance: Int
   }
 
   type Query {
@@ -58,7 +77,27 @@ const getMatchInfo = async ({ dataSources, region, matchId, playerId }) => {
   const {
     id: participantId,
     attributes: {
-      stats: { winPlace: rank }
+      stats: {
+        winPlace: rank,
+        kills,
+        assists,
+        DBNOs,
+        boosts,
+        heals,
+        damageDealt,
+        headshotKills,
+        killPlace,
+        longestKill: longestkill,
+        name,
+        revives,
+        rideDistance: driveDistance,
+        roadKills,
+        swimDistance: swimmingDistance,
+        teamKills,
+        vehicleDestroys: vehiclesDestroyed,
+        timeSurvived: timeAlive,
+        walkDistance: walkingDistance
+      }
     }
   } = participant;
 
@@ -78,16 +117,42 @@ const getMatchInfo = async ({ dataSources, region, matchId, playerId }) => {
 
   const teams = rosters.length;
   const participants = participantsList.length;
+  const allHeals = boosts + heals;
+  const damage = parseInt(damageDealt, 10);
+  const longestKill = parseInt(longestkill, 10);
+  const rideDistance = parseInt(driveDistance, 10);
+  const swimDistance = parseInt(swimmingDistance, 10);
+  const walkDistance = parseInt(walkingDistance, 10);
+  const timeSurvived = parseInt(timeAlive / 60, 10);
+  const matchDuration = parseInt(duration / 60, 10);
 
   return {
     date,
     time,
-    duration,
+    matchDuration,
     gameMode,
     mapName,
     teams,
     participants,
-    rank
+    rank,
+    kills,
+    assists,
+    DBNOs,
+    allHeals,
+    damage,
+    headshotKills,
+    killPlace,
+    longestKill,
+    name,
+    playerId,
+    revives,
+    rideDistance,
+    roadKills,
+    swimDistance,
+    teamKills,
+    vehiclesDestroyed,
+    walkDistance,
+    timeSurvived
   };
 };
 

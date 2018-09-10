@@ -23,15 +23,43 @@ Go to `http://localhost:3001/`
 
 After starting the server, go to `http://localhost:3001/api/graphql` to launch it.
 
-A query example that returns all the Match IDs of a given player:
+### Query examples:
+
+- Get a player ID 
 
 ```
-query GetMatchesQuery {
+query {
+  playerId(region:"pc-eu", playerName:"sguss")
+}
+```
+
+- Get all Match IDs of a given player:
+
+```
+query {
   playerGames(region: "pc-eu", playerName: "JadT26") {
     id
   }
 }
 ```
+
+- Get details of a given match
+
+```
+query {
+  matchInfo(region: "pc-eu", playerId: "account.0dd17dd56bfc443e88c98aaa640aa523", matchId: "b94cc47d-c560-4bd5-9641-d3857e20e5be") {
+    date
+    time
+    duration
+    gameMode
+    mapName
+    teams
+    participants
+    rank
+  }
+}
+```
+
 
 ## Contributors
 

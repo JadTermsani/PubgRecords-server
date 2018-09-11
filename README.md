@@ -50,12 +50,30 @@ query {
   matchInfo(region: "pc-eu", playerId: "account.0dd17dd56bfc443e88c98aaa640aa523", matchId: "b94cc47d-c560-4bd5-9641-d3857e20e5be") {
     date
     time
-    duration
     gameMode
     mapName
     teams
     participants
     rank
+    kills
+    assists
+    DBNOs
+    allHeals
+    damage
+    headshotKills
+    killPlace
+    longestKill
+    name
+    playerId
+    revives
+    rideDistance
+    roadKills
+    swimDistance
+    teamKills
+    vehiclesDestroyed
+    walkDistance
+    timeSurvived
+    matchDuration
   }
 }
 ```

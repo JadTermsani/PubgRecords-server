@@ -5,7 +5,7 @@
 
 This is currently deployed on heroku and serves as a proxy between the [PUBG API](https://documentation.playbattlegrounds.com/en/introduction.html) and the [pubgrecords](https://www.pubgrecords.com) web app.
 
-## To Run locally
+## To run locally
 
 ```
 yarn
@@ -14,7 +14,7 @@ yarn
 Rename `.env.example` to `.env` and include your own API Key that you can get from [here](https://developer.playbattlegrounds.com/).
 
 ```
-yarn start
+yarn dev
 ```
 
 Go to `http://localhost:3001/`
@@ -43,7 +43,7 @@ query {
 }
 ```
 
-- Get details of a given match
+- Get the season stats of a given player
 
 ```
 query {
@@ -74,6 +74,37 @@ query {
     walkDistance
     timeSurvived
     matchDuration
+  }
+}
+```
+- Get Seasonal stats of a given player
+
+```
+query {
+  getSeasonStats(
+    region: "pc-eu"
+    playerId: "account.0dd17dd56bfc443e88c98aaa640aa523"
+    season: "division.bro.official.2018-04"
+  ) {
+    kills
+    assists
+    deaths
+    rounds
+    wins
+    top10s
+    suicides
+    teamKills
+    kdRatio
+    runningDistance
+    drivingDistance
+    vehiclesDestroyed
+    heals
+    revives
+    damage
+    mostKills
+    longestKill
+    timePlayed
+    longestGame
   }
 }
 ```

@@ -254,7 +254,8 @@ const resolvers = {
             roundMostKills,
             longestKill,
             timeSurvived,
-            longestTimeSurvived
+            longestTimeSurvived,
+            boosts
           },
           idx,
           arr
@@ -282,7 +283,7 @@ const resolvers = {
           vehiclesDestroyed: accum.vehicleDestroys
             ? accum.vehicleDestroys + vehicleDestroys
             : vehicleDestroys,
-          heals: accum.heals ? accum.heals + heals : heals,
+          heals: accum.heals ? accum.heals + heals + boosts : heals + boosts,
           revives: accum.revives ? accum.revives + revives : revives,
           damage: accum.damageDealt
             ? accum.damageDealt + damageDealt

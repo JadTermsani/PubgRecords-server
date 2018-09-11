@@ -1,5 +1,5 @@
 const { gql } = require('apollo-server-express');
-const { head, partition, find, filter } = require('lodash');
+const { head, partition, find, filter, values, reduce } = require('lodash');
 
 const typeDefs = gql`
   type PlayerGame {
@@ -37,6 +37,28 @@ const typeDefs = gql`
     walkDistance: Int
   }
 
+  type SeasonStats {
+    kills: Int
+    assists: Int
+    deaths: Int
+    rounds: Int
+    wins: Int
+    top10s: Int
+    suicides: Int
+    teamKills: Int
+    kdRatio: Int
+    runningDistance: Int
+    drivingDistance: Int
+    vehiclesDestroyed: Int
+    heals: Int
+    revives: Int
+    damage: Int
+    mostKills: Int
+    longestKill: Int
+    timePlayed: Int
+    longestGame: Int
+  }
+
   type Query {
     playerGames(region: String!, playerName: String!): [PlayerGame]
     matchInfo(region: String!, matchId: String!, playerId: String!): MatchInfo
@@ -46,6 +68,11 @@ const typeDefs = gql`
       playerId: String!
     ): [MatchInfo]
     playerId(region: String!, playerName: String!): ID!
+    getSeasonStats(
+      region: String!
+      playerId: String!
+      season: String!
+    ): SeasonStats
   }
 `;
 
@@ -188,6 +215,96 @@ const resolvers = {
     },
     matchInfo: async (root, { region, matchId, playerId }, { dataSources }) =>
       getMatchInfo({ dataSources, region, matchId, playerId }),
+    getSeasonStats: async (
+      root,
+      { region, playerId, season },
+      { dataSources }
+    ) => {
+      const information = await dataSources.pubgAPI.getSeason(
+        region,
+        playerId,
+        season
+      );
+
+      const {
+        data: {
+          attributes: { gameModeStats }
+        }
+      } = information;
+
+      const summed = reduce(
+        values(gameModeStats),
+        (
+          accum,
+          {
+            kills,
+            assists,
+            losses,
+            roundsPlayed,
+            wins,
+            top10s,
+            suicides,
+            teamKills,
+            walkDistance,
+            rideDistance,
+            vehicleDestroys,
+            heals,
+            revives,
+            damageDealt,
+            roundMostKills,
+            longestKill,
+            timeSurvived,
+            longestTimeSurvived
+          },
+          idx,
+          arr
+        ) => ({
+          kills: accum.kills ? accum.kills + kills : kills,
+          assists: accum.assists ? accum.assists + assists : assists,
+          losses: accum.losses ? accum.losses + losses : losses,
+          roundsPlayed: accum.roundsPlayed
+            ? accum.roundsPlayed + roundsPlayed
+            : roundsPlayed,
+          wins: accum.wins ? accum.wins + wins : wins,
+          top10s: accum.top10s ? accum.top10s + top10s : top10s,
+          suicides: accum.suicides ? accum.suicides + suicides : suicides,
+          teamKills: accum.teamKills ? accum.teamKills + teamKills : teamKills,
+          kdRatio:
+            idx === arr.length - 1
+              ? (accum.kills + kills) / (accum.losses + losses)
+              : 0,
+          runningDistance: accum.walkDistance
+            ? accum.walkDistance + walkDistance
+            : walkDistance,
+          drivingDistance: accum.rideDistance
+            ? accum.rideDistance + rideDistance
+            : rideDistance,
+          vehiclesDestroyed: accum.vehicleDestroys
+            ? accum.vehicleDestroys + vehicleDestroys
+            : vehicleDestroys,
+          heals: accum.heals ? accum.heals + heals : heals,
+          revives: accum.revives ? accum.revives + revives : revives,
+          damage: accum.damageDealt
+            ? accum.damageDealt + damageDealt
+            : damageDealt,
+          mostKills: accum.roundMostKills
+            ? Math.max(accum.roundMostKills, roundMostKills)
+            : roundMostKills,
+          longestKill: accum.longestKill
+            ? Math.max(accum.longestKill, longestKill)
+            : longestKill,
+          timePlayed: accum.timeSurvived
+            ? accum.timeSurvived + timeSurvived
+            : timeSurvived,
+          longestGame: accum.longestTimeSurvived
+            ? Math.max(accum.longestTimeSurvived, longestTimeSurvived)
+            : longestTimeSurvived
+        }),
+        {}
+      );
+
+      return summed;
+    },
     matchesInfo: async (
       root,
       { region, matchesId, playerId },

@@ -29,7 +29,7 @@ After starting the server, go to `http://localhost:3001/api/graphql` to launch i
 
 ```
 query {
-  playerId(region:"pc-eu", playerName:"sguss")
+  playerId(region:"pc-eu", playerName:"JadT26")
 }
 ```
 

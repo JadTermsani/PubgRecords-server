@@ -52,32 +52,32 @@ query {
   playerId: "account.0dd17dd56bfc443e88c98aaa640aa523",
   matchId: "b94cc47d-c560-4bd5-9641-d3857e20e5be"
   ) {
-    date
-    time
-    gameMode
-    mapName
-    teams
-    participants
-    rank
-    kills
     assists
-    DBNOs
-    allHeals
     damage
+    date (YYYY-MM-DD)
+    DBNOs
+    gameMode
     headshotKills
+    heals
     killPlace
+    kills
     longestKill
+    mapName
+    matchDuration (minutes)
     name
+    participants
     playerId
+    rank
     revives
-    rideDistance
+    rideDistance (meters)
     roadKills
-    swimDistance
+    swimDistance (meters)
     teamKills
+    teams
+    time (HH:MM:SS)
+    timeSurvived (minutes)
     vehiclesDestroyed
-    walkDistance
-    timeSurvived
-    matchDuration
+    walkDistance (meters)
   }
 }
 ```
@@ -90,29 +90,29 @@ query {
     playerId: "account.0dd17dd56bfc443e88c98aaa640aa523"
     season: "division.bro.official.2018-04"
   ) {
-    kills
     assists
+    damage
     deaths
+    drivingDistance (meters)
+    heals
+    kdRatio
+    kills
+    longestGame (minutes)
+    longestKill
+    mostKills
+    revives
     rounds
-    wins
-    top10s
+    runningDistance (meters)
     suicides
     teamKills
-    kdRatio
-    runningDistance
-    drivingDistance
+    timePlayed (minutes)
+    top10s
     vehiclesDestroyed
-    heals
-    revives
-    damage
-    mostKills
-    longestKill
-    timePlayed
-    longestGame
+    wins
   }
 }
 ```
-
+## Telemetry data (coming soon™)
 
 ## Contributors
 

@@ -22,7 +22,7 @@ const typeDefs = gql`
     assists: Int
     DBNOs: Int
     boosts: Int
-    allHeals: Int
+    heals: Int
     damage: Int
     headshotKills: Int
     killPlace: Int
@@ -46,7 +46,7 @@ const typeDefs = gql`
     top10s: Int
     suicides: Int
     teamKills: Int
-    kdRatio: Int
+    kdRatio: Float
     runningDistance: Int
     drivingDistance: Int
     vehiclesDestroyed: Int
@@ -54,7 +54,7 @@ const typeDefs = gql`
     revives: Int
     damage: Int
     mostKills: Int
-    longestKill: Int
+    longestKill: Float
     timePlayed: Int
     longestGame: Int
   }
@@ -110,7 +110,7 @@ const getMatchInfo = async ({ dataSources, region, matchId, playerId }) => {
         assists,
         DBNOs,
         boosts,
-        heals,
+        heals: Heals,
         damageDealt,
         headshotKills,
         killPlace,
@@ -144,7 +144,7 @@ const getMatchInfo = async ({ dataSources, region, matchId, playerId }) => {
 
   const teams = rosters.length;
   const participants = participantsList.length;
-  const allHeals = boosts + heals;
+  const heals = boosts + Heals;
   const damage = parseInt(damageDealt, 10);
   const longestKill = parseInt(longestkill, 10);
   const rideDistance = parseInt(driveDistance, 10);
@@ -165,7 +165,7 @@ const getMatchInfo = async ({ dataSources, region, matchId, playerId }) => {
     kills,
     assists,
     DBNOs,
-    allHeals,
+    heals,
     damage,
     headshotKills,
     killPlace,
@@ -259,48 +259,66 @@ const resolvers = {
           },
           idx,
           arr
-        ) => ({
-          kills: accum.kills ? accum.kills + kills : kills,
-          assists: accum.assists ? accum.assists + assists : assists,
-          losses: accum.losses ? accum.losses + losses : losses,
-          roundsPlayed: accum.roundsPlayed
-            ? accum.roundsPlayed + roundsPlayed
-            : roundsPlayed,
-          wins: accum.wins ? accum.wins + wins : wins,
-          top10s: accum.top10s ? accum.top10s + top10s : top10s,
-          suicides: accum.suicides ? accum.suicides + suicides : suicides,
-          teamKills: accum.teamKills ? accum.teamKills + teamKills : teamKills,
-          kdRatio:
-            idx === arr.length - 1
-              ? (accum.kills + kills) / (accum.losses + losses)
-              : 0,
-          runningDistance: accum.walkDistance
-            ? accum.walkDistance + walkDistance
-            : walkDistance,
-          drivingDistance: accum.rideDistance
-            ? accum.rideDistance + rideDistance
-            : rideDistance,
-          vehiclesDestroyed: accum.vehicleDestroys
-            ? accum.vehicleDestroys + vehicleDestroys
-            : vehicleDestroys,
-          heals: accum.heals ? accum.heals + heals + boosts : heals + boosts,
-          revives: accum.revives ? accum.revives + revives : revives,
-          damage: accum.damageDealt
-            ? accum.damageDealt + damageDealt
-            : damageDealt,
-          mostKills: accum.roundMostKills
-            ? Math.max(accum.roundMostKills, roundMostKills)
-            : roundMostKills,
-          longestKill: accum.longestKill
-            ? Math.max(accum.longestKill, longestKill)
-            : longestKill,
-          timePlayed: accum.timeSurvived
-            ? accum.timeSurvived + timeSurvived
-            : timeSurvived,
-          longestGame: accum.longestTimeSurvived
-            ? Math.max(accum.longestTimeSurvived, longestTimeSurvived)
-            : longestTimeSurvived
-        }),
+        ) => {
+          return {
+            kills: accum.kills ? accum.kills + kills : kills,
+            assists: accum.assists ? accum.assists + assists : assists,
+            deaths: accum.deaths ? accum.deaths + losses : losses,
+            rounds: accum.rounds ? accum.rounds + roundsPlayed : roundsPlayed,
+            wins: accum.wins ? accum.wins + wins : wins,
+            top10s: accum.top10s ? accum.top10s + top10s : top10s,
+            suicides: accum.suicides ? accum.suicides + suicides : suicides,
+            teamKills: accum.teamKills
+              ? accum.teamKills + teamKills
+              : teamKills,
+            kdRatio: parseFloat(
+              idx === arr.length - 1
+                ? (accum.kills + kills) / (accum.deaths + losses)
+                : 0
+            ).toFixed(2),
+            runningDistance: parseInt(
+              accum.runningDistance
+                ? accum.runningDistance + walkDistance
+                : walkDistance,
+              10
+            ),
+            drivingDistance: parseInt(
+              accum.drivingDistance
+                ? accum.drivingDistance + rideDistance
+                : rideDistance,
+              10
+            ),
+            vehiclesDestroyed: accum.vehiclesDestroyed
+              ? accum.vehiclesDestroyed + vehicleDestroys
+              : vehicleDestroys,
+            heals: accum.heals ? accum.heals + heals + boosts : heals + boosts,
+            revives: accum.revives ? accum.revives + revives : revives,
+            damage: parseInt(
+              accum.damage ? accum.damage + damageDealt : damageDealt,
+              10
+            ),
+            mostKills: accum.mostKills
+              ? Math.max(accum.mostKills, roundMostKills)
+              : roundMostKills,
+            longestKill: parseFloat(
+              accum.longestKill
+                ? Math.max(accum.longestKill, longestKill)
+                : longestKill
+            ).toFixed(2),
+            timePlayed: parseInt(
+              accum.timePlayed
+                ? accum.timePlayed + timeSurvived / 60
+                : timeSurvived / 60,
+              10
+            ),
+            longestGame: parseInt(
+              accum.longestGame
+                ? Math.max(accum.longestGame, longestTimeSurvived / 60)
+                : longestTimeSurvived / 60,
+              10
+            )
+          };
+        },
         {}
       );
 

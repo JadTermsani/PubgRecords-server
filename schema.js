@@ -22,7 +22,7 @@ const typeDefs = gql`
     assists: Int
     DBNOs: Int
     boosts: Int
-    allHeals: Int
+    heals: Int
     damage: Int
     headshotKills: Int
     killPlace: Int
@@ -110,7 +110,7 @@ const getMatchInfo = async ({ dataSources, region, matchId, playerId }) => {
         assists,
         DBNOs,
         boosts,
-        heals,
+        heals: Heals,
         damageDealt,
         headshotKills,
         killPlace,
@@ -144,7 +144,7 @@ const getMatchInfo = async ({ dataSources, region, matchId, playerId }) => {
 
   const teams = rosters.length;
   const participants = participantsList.length;
-  const allHeals = boosts + heals;
+  const heals = boosts + Heals;
   const damage = parseInt(damageDealt, 10);
   const longestKill = parseInt(longestkill, 10);
   const rideDistance = parseInt(driveDistance, 10);
@@ -165,7 +165,7 @@ const getMatchInfo = async ({ dataSources, region, matchId, playerId }) => {
     kills,
     assists,
     DBNOs,
-    allHeals,
+    heals,
     damage,
     headshotKills,
     killPlace,
@@ -313,8 +313,8 @@ const resolvers = {
             ),
             longestGame: parseInt(
               accum.longestGame
-                ? Math.max(accum.longestGame, longestTimeSurvived)
-                : longestTimeSurvived,
+                ? Math.max(accum.longestGame, longestTimeSurvived / 60)
+                : longestTimeSurvived / 60,
               10
             )
           };

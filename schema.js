@@ -7,16 +7,25 @@ const typeDefs = gql`
     type: String
   }
 
-  type MatchInfo {
-    name: String
-    playerId: String
-    date: String
-    time: String
-    matchDuration: Int
+  type MatchesInfo {
+    playersInfo: [PlayerInfo]
+    generalInfo: GeneralInfo
+  }
+
+  type GeneralInfo {
     gameMode: String
+    time: String
+    date: String
+    matchDuration: Int
     mapName: String
     teams: Int
     participants: Int
+    userRank: Int
+  }
+
+  type PlayerInfo {
+    name: String
+    playerId: String
     rank: Int
     kills: Int
     assists: Int
@@ -61,12 +70,16 @@ const typeDefs = gql`
 
   type Query {
     playerGames(region: String!, playerName: String!): [PlayerGame]
-    matchInfo(region: String!, matchId: String!, playerId: String!): MatchInfo
+    matchInfo(
+      region: String!
+      matchId: [String!]!
+      playerId: String!
+    ): MatchesInfo
     matchesInfo(
       region: String!
       matchesId: [String!]!
       playerId: String!
-    ): [MatchInfo]
+    ): [MatchesInfo]
     playerId(region: String!, playerName: String!): ID!
     getSeasonStats(
       region: String!
@@ -85,7 +98,7 @@ const getMatchInfo = async ({ dataSources, region, matchId, playerId }) => {
       attributes: { createdAt, duration, gameMode, mapName }
     }
   } = matchData;
-
+  let matchDuration, teams, participants, userRank;
   let [date, time] = createdAt.split('T');
   time = time.slice(0, -1);
 
@@ -101,32 +114,7 @@ const getMatchInfo = async ({ dataSources, region, matchId, playerId }) => {
     }) => id === playerId
   );
 
-  const {
-    id: participantId,
-    attributes: {
-      stats: {
-        winPlace: rank,
-        kills,
-        assists,
-        DBNOs,
-        boosts,
-        heals: Heals,
-        damageDealt,
-        headshotKills,
-        killPlace,
-        longestKill: longestkill,
-        name,
-        revives,
-        rideDistance: driveDistance,
-        roadKills,
-        swimDistance: swimmingDistance,
-        teamKills,
-        vehicleDestroys: vehiclesDestroyed,
-        timeSurvived: timeAlive,
-        walkDistance: walkingDistance
-      }
-    }
-  } = participant;
+  const { id: participantId } = participant;
 
   const teamIds = find(
     rosters,
@@ -140,46 +128,78 @@ const getMatchInfo = async ({ dataSources, region, matchId, playerId }) => {
   const teamStats = filter(
     participantsList,
     ({ id }) => !!find(teamIds, ({ id: teamId }) => teamId === id)
-  );
-
-  const teams = rosters.length;
-  const participants = participantsList.length;
-  const heals = boosts + Heals;
-  const damage = parseInt(damageDealt, 10);
-  const longestKill = parseInt(longestkill, 10);
-  const rideDistance = parseInt(driveDistance, 10);
-  const swimDistance = parseInt(swimmingDistance, 10);
-  const walkDistance = parseInt(walkingDistance, 10);
-  const timeSurvived = parseInt(timeAlive / 60, 10);
-  const matchDuration = parseInt(duration / 60, 10);
+  ).map(participant => {
+    const {
+      attributes: {
+        stats: {
+          winPlace: rank,
+          kills,
+          assists,
+          DBNOs,
+          boosts,
+          heals: Heals,
+          damageDealt,
+          headshotKills,
+          killPlace,
+          longestKill: longestkill,
+          name,
+          revives,
+          rideDistance: driveDistance,
+          roadKills,
+          swimDistance: swimmingDistance,
+          teamKills,
+          vehicleDestroys: vehiclesDestroyed,
+          timeSurvived: timeAlive,
+          walkDistance: walkingDistance
+        }
+      }
+    } = participant;
+    const heals = boosts + Heals;
+    const damage = parseInt(damageDealt, 10);
+    const longestKill = parseInt(longestkill, 10);
+    const rideDistance = parseInt(driveDistance, 10);
+    const swimDistance = parseInt(swimmingDistance, 10);
+    const walkDistance = parseInt(walkingDistance, 10);
+    const timeSurvived = parseInt(timeAlive / 60, 10);
+    matchDuration = parseInt(duration / 60, 10);
+    teams = rosters.length;
+    participants = participantsList.length;
+    userRank = rank;
+    return {
+      rank,
+      kills,
+      assists,
+      DBNOs,
+      heals,
+      damage,
+      headshotKills,
+      killPlace,
+      longestKill,
+      name,
+      playerId,
+      revives,
+      rideDistance,
+      roadKills,
+      swimDistance,
+      teamKills,
+      vehiclesDestroyed,
+      walkDistance,
+      timeSurvived
+    };
+  });
 
   return {
-    date,
-    time,
-    matchDuration,
-    gameMode,
-    mapName,
-    teams,
-    participants,
-    rank,
-    kills,
-    assists,
-    DBNOs,
-    heals,
-    damage,
-    headshotKills,
-    killPlace,
-    longestKill,
-    name,
-    playerId,
-    revives,
-    rideDistance,
-    roadKills,
-    swimDistance,
-    teamKills,
-    vehiclesDestroyed,
-    walkDistance,
-    timeSurvived
+    playersInfo: teamStats,
+    generalInfo: {
+      gameMode,
+      time,
+      date,
+      matchDuration,
+      mapName,
+      teams,
+      participants,
+      userRank
+    }
   };
 };
 

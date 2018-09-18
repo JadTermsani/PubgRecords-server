@@ -1,7 +1,8 @@
 # pubgrecords.com GraphQL server
 
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
-[![Heroku](http://heroku-badges.herokuapp.com/?app=pubgrecords-graphql)](https://pubgrecords-graphql.herokuapp.com/)
+[![Heroku](http://heroku-badges.herokuapp.com/?app=pubgrecords-graphql&style=flat)](https://pubgrecords-graphql.herokuapp.com/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
 This is currently deployed on [heroku](https://pubgrecords-graphql.herokuapp.com/api/graphql) and serves as a proxy between the [PUBG API](https://documentation.playbattlegrounds.com/en/introduction.html) and the [pubgrecords](https://www.pubgrecords.com) web app.
 
@@ -101,8 +102,8 @@ query {
 query {
   getSeasonStats(
     region: "pc-eu"
-    playerId: "account.0dd17dd56bfc443e88c98aaa640aa523"
-    season: "division.bro.official.2018-04"
+    playerId: "account.c04b3561ec5442c9bb52433648482b65"
+    season: "division.bro.official.2018-08"
   ) {
     assists
     damage

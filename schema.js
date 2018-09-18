@@ -20,6 +20,7 @@ const typeDefs = gql`
     mapName: String
     teams: Int
     participants: Int
+    userRank: Int
   }
 
   type PlayerInfo {
@@ -78,7 +79,7 @@ const typeDefs = gql`
       region: String!
       matchesId: [String!]!
       playerId: String!
-    ): PlayerInfo
+    ): [MatchesInfo]
     playerId(region: String!, playerName: String!): ID!
     getSeasonStats(
       region: String!
@@ -97,7 +98,7 @@ const getMatchInfo = async ({ dataSources, region, matchId, playerId }) => {
       attributes: { createdAt, duration, gameMode, mapName }
     }
   } = matchData;
-  let matchDuration, teams, participants;
+  let matchDuration, teams, participants, userRank;
   let [date, time] = createdAt.split('T');
   time = time.slice(0, -1);
 
@@ -163,7 +164,7 @@ const getMatchInfo = async ({ dataSources, region, matchId, playerId }) => {
     matchDuration = parseInt(duration / 60, 10);
     teams = rosters.length;
     participants = participantsList.length;
-
+    userRank = rank;
     return {
       rank,
       kills,
@@ -196,7 +197,8 @@ const getMatchInfo = async ({ dataSources, region, matchId, playerId }) => {
       matchDuration,
       mapName,
       teams,
-      participants
+      participants,
+      userRank
     }
   };
 };

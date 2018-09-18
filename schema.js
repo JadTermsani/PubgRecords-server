@@ -7,16 +7,24 @@ const typeDefs = gql`
     type: String
   }
 
-  type PlayerInfo {
-    name: String
-    playerId: String
-    date: String
-    time: String
-    matchDuration: Int
+  type MatchesInfo {
+    playersInfo: [PlayerInfo]
+    generalInfo: GeneralInfo
+  }
+
+  type GeneralInfo {
     gameMode: String
+    time: String
+    date: String
+    matchDuration: Int
     mapName: String
     teams: Int
     participants: Int
+  }
+
+  type PlayerInfo {
+    name: String
+    playerId: String
     rank: Int
     kills: Int
     assists: Int
@@ -63,14 +71,14 @@ const typeDefs = gql`
     playerGames(region: String!, playerName: String!): [PlayerGame]
     matchInfo(
       region: String!
-      matchId: String!
+      matchId: [String!]!
       playerId: String!
-    ): [PlayerInfo]
+    ): MatchesInfo
     matchesInfo(
       region: String!
       matchesId: [String!]!
       playerId: String!
-    ): [[PlayerInfo]]
+    ): PlayerInfo
     playerId(region: String!, playerName: String!): ID!
     getSeasonStats(
       region: String!
@@ -89,7 +97,7 @@ const getMatchInfo = async ({ dataSources, region, matchId, playerId }) => {
       attributes: { createdAt, duration, gameMode, mapName }
     }
   } = matchData;
-
+  let matchDuration, teams, participants;
   let [date, time] = createdAt.split('T');
   time = time.slice(0, -1);
 
@@ -152,18 +160,11 @@ const getMatchInfo = async ({ dataSources, region, matchId, playerId }) => {
     const swimDistance = parseInt(swimmingDistance, 10);
     const walkDistance = parseInt(walkingDistance, 10);
     const timeSurvived = parseInt(timeAlive / 60, 10);
-    const matchDuration = parseInt(duration / 60, 10);
-    const teams = rosters.length;
-    const participants = participantsList.length;
+    matchDuration = parseInt(duration / 60, 10);
+    teams = rosters.length;
+    participants = participantsList.length;
 
     return {
-      date,
-      time,
-      matchDuration,
-      gameMode,
-      mapName,
-      teams,
-      participants,
       rank,
       kills,
       assists,
@@ -186,7 +187,18 @@ const getMatchInfo = async ({ dataSources, region, matchId, playerId }) => {
     };
   });
 
-  return teamStats;
+  return {
+    playersInfo: teamStats,
+    generalInfo: {
+      gameMode,
+      time,
+      date,
+      matchDuration,
+      mapName,
+      teams,
+      participants
+    }
+  };
 };
 
 const resolvers = {

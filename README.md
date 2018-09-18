@@ -3,7 +3,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
 [![Heroku](http://heroku-badges.herokuapp.com/?app=pubgrecords-graphql)](https://pubgrecords-graphql.herokuapp.com/)
 
-This is currently deployed on heroku and serves as a proxy between the [PUBG API](https://documentation.playbattlegrounds.com/en/introduction.html) and the [pubgrecords](https://www.pubgrecords.com) web app.
+This is currently deployed on [heroku](https://pubgrecords-graphql.herokuapp.com/api/graphql) and serves as a proxy between the [PUBG API](https://documentation.playbattlegrounds.com/en/introduction.html) and the [pubgrecords](https://www.pubgrecords.com) web app.
 
 ## To run locally
 
@@ -21,11 +21,19 @@ Go to `http://localhost:3001/`
 
 ## To test using the GraphQL interface
 
+- Locally:
+
 After starting the server, go to `http://localhost:3001/api/graphql` to launch it.
+
+- On the Web
+
+Go to https://pubgrecords-graphql.herokuapp.com/api/graphql
+
+`Note: Don't worry about the errors, queries will work normally`
 
 ### Query examples:
 
-- Get a player ID 
+- Get a player ID:
 
 ```
 query {
@@ -33,7 +41,7 @@ query {
 }
 ```
 
-- Get all Match IDs of a given player:
+- Get all match IDs for a given player:
 
 ```
 query {
@@ -43,45 +51,51 @@ query {
 }
 ```
 
-- Get the season stats of a given player
+- Get the details of 1 or more matches for a given player:
 
 ```
 query {
-  matchInfo(
-  region: "pc-eu",
-  playerId: "account.0dd17dd56bfc443e88c98aaa640aa523",
-  matchId: "b94cc47d-c560-4bd5-9641-d3857e20e5be"
+  matchesInfo(
+    region: "pc-eu"
+    playerId: "account.c04b3561ec5442c9bb52433648482b65"
+    matchesId: "a3d0171b-0288-4e59-be08-2414eb1ebc31"
+    // matchesId: ["a3d0171b-0288-4e59-be08-2414eb1ebc31", "22a67e10-30e6-4fcd-b902-9759015c0dcc", "4780ad2f-6d93-4a8b-b4da-efe5c0db2fda"]
   ) {
-    assists
-    damage
-    date (YYYY-MM-DD)
-    DBNOs
-    gameMode
-    headshotKills
-    heals
-    killPlace
-    kills
-    longestKill
-    mapName
-    matchDuration (minutes)
-    name
-    participants
-    playerId
-    rank
-    revives
-    rideDistance (meters)
-    roadKills
-    swimDistance (meters)
-    teamKills
-    teams
-    time (HH:MM:SS)
-    timeSurvived (minutes)
-    vehiclesDestroyed
-    walkDistance (meters)
+    playersInfo {
+      assists
+      damage
+      DBNOs
+      headshotKills
+      heals
+      killPlace
+      kills
+      longestKill
+      name
+      playerId
+      rank
+      revives
+      rideDistance (meters)
+      roadKills
+      swimDistance (meters)
+      teamKills
+      timeSurvived (minutes)
+      vehiclesDestroyed
+      walkDistance (meters)
+    }
+    generalInfo {
+      date (YYYY-MM-DD)
+      gameMode
+      mapName
+      matchDuration (minutes)
+      participants
+      teams
+      time (HH:MM:SS)
+      userRank
+    }
   }
 }
 ```
-- Get Seasonal stats of a given player
+- Get the seasonal stats for a given player
 
 ```
 query {

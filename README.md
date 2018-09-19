@@ -6,7 +6,7 @@
 
 This is currently deployed on [heroku](https://pubgrecords-graphql.herokuapp.com/api/graphql) and serves as a proxy between the [PUBG API](https://documentation.playbattlegrounds.com/en/introduction.html) and the [pubgrecords](https://www.pubgrecords.com) web app.
 
-## To run locally
+## To run locally :computer:
 
 ```
 yarn
@@ -18,31 +18,44 @@ Rename `.env.example` to `.env` and include your own API Key that you can get fr
 yarn dev
 ```
 
-Go to `http://localhost:3001/`
+Go to http://localhost:3001/
 
 ## To test using the GraphQL interface
 
-- Locally:
+- Locally :computer: :
 
-After starting the server, go to `http://localhost:3001/api/graphql` to launch it.
+After starting the server, go to http://localhost:3001/api/graphql to launch it.
 
-- On the Web
+- On the Web :earth_asia: :
 
 Go to https://pubgrecords-graphql.herokuapp.com/api/graphql
 
-`Note: Don't worry about the errors, queries will work normally`
+`Note: Don't worry about the errors, queries will work normally` :smile:
 
 ### Query examples:
 
-- Get a player ID:
+#### Get a player ID:
+
+Query:
 
 ```
 query {
   playerId(region:"pc-eu", playerName:"JadT26")
 }
 ```
+Result:
 
-- Get all match IDs for a given player:
+```
+{
+  "data": {
+    "playerId": "account.c04b3561ec5442c9bb52433648482b65"
+  }
+}
+```
+
+#### Get all match IDs for a given player:
+
+Query:
 
 ```
 query {
@@ -51,8 +64,30 @@ query {
   }
 }
 ```
+Result:
 
-- Get the details of 1 or more matches for a given player:
+```
+{
+  "data": {
+    "playerGames": [
+      {
+        "id": "a3f7f354-bab0-4b54-9a3f-3ba5f0bc0cdb"
+      },
+      {
+        "id": "a3d0171b-0288-4e59-be08-2414eb1ebc31"
+      },
+      {
+        "id": "22a67e10-30e6-4fcd-b902-9759015c0dcc"
+      },
+      ...
+    ]
+  }
+}
+```
+
+#### Get the details of 1 or more matches for a given player:
+
+Query:
 
 ```
 query {
@@ -96,7 +131,77 @@ query {
   }
 }
 ```
-- Get the seasonal stats for a given player
+
+Result (of a single match): 
+
+```
+{
+  "data": {
+    "matchesInfo": [
+      {
+        "playersInfo": [
+          {
+            "assists": 0,
+            "damage": 335,
+            "DBNOs": 0,
+            "headshotKills": 0,
+            "heals": 12,
+            "killPlace": 23,
+            "kills": 1,
+            "longestKill": 28,
+            "name": "JadT26",
+            "playerId": "account.c04b3561ec5442c9bb52433648482b65",
+            "rank": 9,
+            "revives": 1,
+            "rideDistance": 2048,
+            "roadKills": 0,
+            "swimDistance": 0,
+            "teamKills": 0,
+            "timeSurvived": 24,
+            "vehiclesDestroyed": 1,
+            "walkDistance": 3341
+          },
+          {
+            "assists": 1,
+            "damage": 99,
+            "DBNOs": 1,
+            "headshotKills": 1,
+            "heals": 11,
+            "killPlace": 24,
+            "kills": 1,
+            "longestKill": 32,
+            "name": "sguss",
+            "playerId": "account.c04b3561ec5442c9bb52433648482b65",
+            "rank": 9,
+            "revives": 1,
+            "rideDistance": 2035,
+            "roadKills": 0,
+            "swimDistance": 0,
+            "teamKills": 0,
+            "timeSurvived": 24,
+            "vehiclesDestroyed": 0,
+            "walkDistance": 3654
+          }
+        ],
+        "generalInfo": {
+          "date": "2018-09-17",
+          "gameMode": "duo-fpp",
+          "mapName": "Erangel_Main",
+          "matchDuration": 31,
+          "participants": 87,
+          "teams": 44,
+          "time": "20:35:47",
+          "userRank": 9
+        }
+      }
+    ]
+  }
+}
+```
+
+#### Get the seasonal stats for a given player
+
+Query:
 
 ```
 query {
@@ -113,7 +218,7 @@ query {
     kdRatio
     kills
     longestGame (minutes)
-    longestKill
+    longestKill (meters)
     mostKills
     revives
     rounds
@@ -127,6 +232,37 @@ query {
   }
 }
 ```
+
+Result:
+
+```
+{
+  "data": {
+    "getSeasonStats": {
+      "assists": 22,
+      "damage": 7675,
+      "deaths": 69,
+      "drivingDistance": 16212,
+      "heals": 169,
+      "kdRatio": 0.65,
+      "kills": 45,
+      "longestGame": 26,
+      "longestKill": 226.07,
+      "mostKills": 5,
+      "revives": 14,
+      "rounds": 69,
+      "runningDistance": 54739,
+      "suicides": 0,
+      "teamKills": 1,
+      "timePlayed": 578,
+      "top10s": 16,
+      "vehiclesDestroyed": 0,
+      "wins": 1
+    }
+  }
+}
+```
+
 ## Telemetry data (coming soon™)
 
 ## Contributors

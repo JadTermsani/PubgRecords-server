@@ -5,17 +5,17 @@
   "main": "server.js",
   "dependencies": {
     "apollo-datasource-rest": "^0.1.5",
-    "apollo-server-express": "^2.0.5",
+    "apollo-server-express": "^2.1.0",
     "axios": "^0.18.0",
     "cors": "^2.8.4",
     "dotenv": "^6.0.0",
-    "es6-promise": "^4.2.4",
-    "eslint": "^4.19.1",
+    "es6-promise": "^4.2.5",
+    "eslint": "^5.6.0",
     "express": "^4.16.3",
-    "graphql": "^14.0.0",
+    "graphql": "^14.0.2",
     "isomorphic-fetch": "^2.2.1",
-    "lodash": "^4.17.10",
-    "nodemon": "^1.17.5"
+    "lodash": "^4.17.11",
+    "nodemon": "^1.18.4"
   },
   "devDependencies": {
     "all-contributors-cli": "^5.4.0",

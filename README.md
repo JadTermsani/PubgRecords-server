@@ -38,14 +38,14 @@ Go to https://pubgrecords-graphql.herokuapp.com/api/graphql
 
 Query:
 
-```
+```graphql
 query {
   playerId(region:"pc-eu", playerName:"JadT26")
 }
 ```
 Result:
 
-```
+```json
 {
   "data": {
     "playerId": "account.c04b3561ec5442c9bb52433648482b65"
@@ -57,7 +57,7 @@ Result:
 
 Query:
 
-```
+```graphql
 query {
   playerGames(region: "pc-eu", playerName: "JadT26") {
     id
@@ -89,7 +89,7 @@ Result:
 
 Query:
 
-```
+```graphql
 query {
   matchesInfo(
     region: "pc-eu"
@@ -134,7 +134,7 @@ query {
 
 Result (of a single match): 
 
-```
+```json
 {
   "data": {
     "matchesInfo": [
@@ -203,7 +203,7 @@ Result (of a single match):
 
 Query:
 
-```
+```graphql
 query {
   getSeasonStats(
     region: "pc-eu"
@@ -235,7 +235,7 @@ query {
 
 Result:
 
-```
+```json
 {
   "data": {
     "getSeasonStats": {

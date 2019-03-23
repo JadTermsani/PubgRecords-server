@@ -8,11 +8,15 @@ This is currently deployed on [heroku](https://pubgrecords-graphql.herokuapp.com
 
 ## To run locally :computer:
 
+Install dependencies
+
 ```
-yarn
+yarn install
 ```
 
 Rename `.env.example` to `.env` and include your own API Key that you can get from [here](https://developer.playbattlegrounds.com/).
+
+Run the dev server
 
 ```
 yarn dev
@@ -30,8 +34,6 @@ After starting the server, go to http://localhost:3001/api/graphql to launch it.
 
 Go to https://pubgrecords-graphql.herokuapp.com/api/graphql
 
-`Note: Don't worry about the errors, queries will work normally` :smile:
-
 ### Query examples:
 
 #### Get a player ID:
@@ -40,9 +42,10 @@ Query:
 
 ```graphql
 query {
-  playerId(region:"pc-eu", playerName:"JadT26")
+  playerId(region: "pc-eu", playerName: "JadT26")
 }
 ```
+
 Result:
 
 ```json
@@ -64,6 +67,7 @@ query {
   }
 }
 ```
+
 Result:
 
 ```
@@ -132,7 +136,7 @@ query {
 }
 ```
 
-Result (of a single match): 
+Result (of a single match):
 
 ```json
 {

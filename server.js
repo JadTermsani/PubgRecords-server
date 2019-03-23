@@ -10,7 +10,8 @@ const PubgAPI = require('./pubg-api');
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  dataSources: () => ({ pubgAPI: new PubgAPI() })
+  dataSources: () => ({ pubgAPI: new PubgAPI() }),
+  introspection: true
 });
 
 server.applyMiddleware({ app, path: '/api/graphql' });

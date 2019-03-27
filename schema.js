@@ -1,5 +1,14 @@
 const { gql } = require('apollo-server-express');
-const { head, partition, find, filter, values, reduce } = require('lodash');
+const {
+  head,
+  partition,
+  find,
+  filter,
+  values,
+  reduce,
+  sortBy,
+  set
+} = require('lodash');
 
 const typeDefs = gql`
   type PlayerGame {
@@ -68,6 +77,24 @@ const typeDefs = gql`
     longestGame: Int
   }
 
+  type Players {
+    name: String
+    rank: Int
+    id: ID!
+    stats: Stats
+  }
+
+  type Stats {
+    rankPoints: Int
+    wins: Int
+    games: Int
+    winRatio: Float
+    averageDamage: Int
+    kills: Int
+    killDeathRatio: Float
+    averageRank: Float
+  }
+
   type Query {
     playerGames(region: String!, playerName: String!): [PlayerGame]
     matchInfo(
@@ -81,6 +108,7 @@ const typeDefs = gql`
       playerId: String!
     ): [MatchesInfo]
     playerId(region: String!, playerName: String!): ID!
+    leaderboards(gameMode: String!, count: Int!): [Players!]!
     getSeasonStats(
       region: String!
       playerId: String!
@@ -343,6 +371,34 @@ const resolvers = {
       );
 
       return summed;
+    },
+    leaderboards: async (root, { gameMode, count }, { dataSources }) => {
+      const information = await dataSources.pubgAPI.getLeaderboards(gameMode);
+
+      const leaders = sortBy(information.included, ['attributes.rank']).slice(
+        0,
+        count
+      );
+
+      return leaders.map(item => {
+        set(item, 'attributes.id', item.id);
+        set(
+          item,
+          'attributes.stats.winRatio',
+          (item.attributes.stats.winRatio * 100).toFixed(2)
+        );
+        set(
+          item,
+          'attributes.stats.killDeathRatio',
+          item.attributes.stats.killDeathRatio.toFixed(2)
+        );
+        set(
+          item,
+          'attributes.stats.averageRank',
+          item.attributes.stats.averageRank.toFixed(2)
+        );
+        return item.attributes;
+      });
     },
     matchesInfo: async (
       root,

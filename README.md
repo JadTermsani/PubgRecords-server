@@ -10,7 +10,7 @@ This is currently deployed on [heroku](https://pubgrecords-graphql.herokuapp.com
 
 Install dependencies
 
-```
+```bash
 yarn install
 ```
 
@@ -18,7 +18,7 @@ Rename `.env.example` to `.env` and include your own API Key that you can get fr
 
 Run the dev server
 
-```
+```bash
 yarn dev
 ```
 
@@ -42,7 +42,7 @@ Query:
 
 ```graphql
 query {
-  playerId(region: "pc-eu", playerName: "JadT26")
+  playerId(region: "steam", playerName: "JadT26")
 }
 ```
 
@@ -62,7 +62,7 @@ Query:
 
 ```graphql
 query {
-  playerGames(region: "pc-eu", playerName: "JadT26") {
+  playerGames(region: "steam", playerName: "JadT26") {
     id
   }
 }
@@ -70,7 +70,7 @@ query {
 
 Result:
 
-```
+```json
 {
   "data": {
     "playerGames": [
@@ -96,7 +96,7 @@ Query:
 ```graphql
 query {
   matchesInfo(
-    region: "pc-eu"
+    region: "steam"
     playerId: "account.c04b3561ec5442c9bb52433648482b65"
     matchesId: "a3d0171b-0288-4e59-be08-2414eb1ebc31"
     // matchesId: ["a3d0171b-0288-4e59-be08-2414eb1ebc31", "22a67e10-30e6-4fcd-b902-9759015c0dcc", "4780ad2f-6d93-4a8b-b4da-efe5c0db2fda"]
@@ -210,7 +210,7 @@ Query:
 ```graphql
 query {
   getSeasonStats(
-    region: "pc-eu"
+    region: "steam"
     playerId: "account.c04b3561ec5442c9bb52433648482b65"
     season: "division.bro.official.2018-08"
   ) {
@@ -267,14 +267,77 @@ Result:
 }
 ```
 
+#### Get the Leaderboards
+
+Query:
+
+```graphql
+query {
+  leaderboards(gameMode: "duo", count: 50) {
+    id
+    name
+    rank
+    stats {
+      averageDamage
+      averageRank
+      games
+      killDeathRatio
+      kills
+      rankPoints
+      winRatio (%)
+      wins
+    }
+  }
+}
+```
+
+Results are ordered by player rank
+
+```json
+{
+  "data": {
+    "leaderboards": [
+      {
+        "name": "HuYaTV-17044129",
+        "rank": 1,
+        "id": "account.829af3612d4c4bed8d82a93a176eb7a6",
+        "stats": {
+          "rankPoints": 7508,
+          "wins": 685,
+          "games": 2637,
+          "winRatio": 25.98,
+          "averageDamage": 367,
+          "kills": 8609,
+          "killDeathRatio": 4.17,
+          "averageRank": 12.99
+        }
+      },
+      {
+        "name": "XiGua-520820_Xg",
+        "rank": 2,
+        "id": "account.18455fef7f114facb739bd23ad370e29",
+        "stats": {
+          "rankPoints": 7505,
+          "wins": 557,
+          "games": 2822,
+          "winRatio": 19.74,
+          "averageDamage": 314,
+          "kills": 7371,
+          "killDeathRatio": 3.16,
+          "averageRank": 12.81
+        }
+      },
+      ...
+```
+
 ## Telemetry data (coming soon™)
 
 ## Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
-| [<img src="https://avatars0.githubusercontent.com/u/32297675?v=4" width="100px;"/><br /><sub><b>Jad Termsani</b></sub>](https://github.com/JadTermsani)<br />[💻](https://github.com/JadTermsani/PubgRecords-server/commits?author=JadTermsani "Code") [📖](https://github.com/JadTermsani/PubgRecords-server/commits?author=JadTermsani "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/7265811?v=4" width="100px;"/><br /><sub><b>Serge Kamel</b></sub>](https://github.com/Faultless)<br />[💻](https://github.com/JadTermsani/PubgRecords-server/commits?author=Faultless "Code") [📖](https://github.com/JadTermsani/PubgRecords-server/commits?author=Faultless "Documentation")
-| :---: | :---: |
+| [<img src="https://avatars0.githubusercontent.com/u/32297675?v=4" width="100px;"/><br /><sub><b>Jad Termsani</b></sub>](https://github.com/JadTermsani)<br />[💻](https://github.com/JadTermsani/PubgRecords-server/commits?author=JadTermsani "Code") [📖](https://github.com/JadTermsani/PubgRecords-server/commits?author=JadTermsani "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/7265811?v=4" width="100px;"/><br /><sub><b>Serge Kamel</b></sub>](https://github.com/Faultless)<br />[💻](https://github.com/JadTermsani/PubgRecords-server/commits?author=Faultless "Code") [📖](https://github.com/JadTermsani/PubgRecords-server/commits?author=Faultless "Documentation") |
+| :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 

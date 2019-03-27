@@ -24,4 +24,8 @@ module.exports = class PubgAPI extends RESTDataSource {
   async getSeason(region, playerId, season) {
     return this.get(`/shards/${region}/players/${playerId}/seasons/${season}`);
   }
+
+  async getLeaderboards(gameMode) {
+    return this.get(`/shards/steam/leaderboards/${gameMode}?page[number]=0`);
+  }
 };

@@ -4,7 +4,12 @@
 [![Heroku](http://heroku-badges.herokuapp.com/?app=pubgrecords-graphql&style=flat)](https://pubgrecords-graphql.herokuapp.com/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-This is currently deployed on [heroku](https://pubgrecords-graphql.herokuapp.com/api/graphql) and serves as a proxy between the [PUBG API](https://documentation.playbattlegrounds.com/en/introduction.html) and the [pubgrecords](https://www.pubgrecords.com) web app.
+This server is currently deployed on [heroku](https://pubgrecords-graphql.herokuapp.com/api/graphql) and serves as a proxy between the [PUBG API](https://documentation.playbattlegrounds.com/en/introduction.html) and both Pubg Records Apps:
+
+- Web App: [PubgRecords.com](https://www.pubgrecords.com)
+
+- Android App: 
+  <a href='https://play.google.com/store/apps/details?id=com.pubgrecords&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' width="170" height="80" src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
 
 ## To run locally :computer:
 

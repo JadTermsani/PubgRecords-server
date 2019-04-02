@@ -200,7 +200,7 @@ Result (of a single match):
           "matchDuration": 31,
           "participants": 87,
           "teams": 44,
-          "telemetryUrl": "https://telemetry-cdn.playbattlegrounds.com/bluehole-pubg/pc-eu/2019/03/23/14/11/8a691612-4d75-11e9-ad4d-0a586463690a-telemetry.json"
+          "telemetryUrl": "https://telemetry-cdn.playbattlegrounds.com/bluehole-pubg/pc-eu/2019/03/23/14/11/8a691612-4d75-11e9-ad4d-0a586463690a-telemetry.json",
           "time": "20:35:47",
           "userRank": 9,
 
@@ -389,7 +389,7 @@ Response
             "y": 292,
             "z": 1256
           },
-          ... so much more
+          ...
 ```
 
 ## Contributors

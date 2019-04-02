@@ -28,4 +28,9 @@ module.exports = class PubgAPI extends RESTDataSource {
   async getLeaderboards(gameMode) {
     return this.get(`/shards/steam/leaderboards/${gameMode}?page[number]=0`);
   }
+
+  async getTelemetryData(url) {
+    console.log('downloading ..');
+    return this.get(url);
+  }
 };

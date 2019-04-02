@@ -134,6 +134,7 @@ query {
       matchDuration (minutes)
       participants
       teams
+      telemetryUrl
       time (HH:MM:SS)
       userRank
     }
@@ -199,8 +200,10 @@ Result (of a single match):
           "matchDuration": 31,
           "participants": 87,
           "teams": 44,
+          "telemetryUrl": "https://telemetry-cdn.playbattlegrounds.com/bluehole-pubg/pc-eu/2019/03/23/14/11/8a691612-4d75-11e9-ad4d-0a586463690a-telemetry.json",
           "time": "20:35:47",
-          "userRank": 9
+          "userRank": 9,
+
         }
       }
     ]
@@ -335,7 +338,59 @@ Results are ordered by player rank
       ...
 ```
 
-## Telemetry data (coming soon™)
+## Telemetry data :tada:
+
+### Coordinates
+
+The coordinates represent the player's movement from the moment the player lands until his death (or victory).
+The query requires a `telemetry url` and a `username` of a participant of this match.
+
+#### Get the coordinates of a single user
+
+```graphql
+query {
+  telemetry(
+    url: "https://telemetry-cdn.playbattlegrounds.com/bluehole-pubg/pc-eu-telemetry.json",
+    user:"JadT26"
+  ) {
+     Coordinates{
+      Id
+      Coords {
+        x
+        y
+        z
+      }
+    }
+  }
+}
+```
+
+Response
+
+```json
+{
+  "data": {
+    "telemetry": {
+      "Coordinates": {
+        "Id": "JadT26",
+        "Coords": [
+          {
+            "x": 202,
+            "y": 292,
+            "z": 1256
+          },
+          {
+            "x": 199,
+            "y": 292,
+            "z": 1256
+          },
+          {
+            "x": 199,
+            "y": 292,
+            "z": 1256
+          },
+          ...
+```
 
 ## Contributors
 

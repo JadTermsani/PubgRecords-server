@@ -30,6 +30,7 @@ const typeDefs = gql`
     teams: Int
     participants: Int
     userRank: Int
+    telemetryUrl: String
   }
 
   type PlayerInfo {
@@ -95,6 +96,21 @@ const typeDefs = gql`
     averageRank: Float
   }
 
+  type Telemetry {
+    Coordinates: Coordinates
+  }
+
+  type Coordinates {
+    Id: String
+    Coords: [Coords]
+  }
+
+  type Coords {
+    x: Int
+    y: Int
+    z: Int
+  }
+
   type Query {
     playerGames(region: String!, playerName: String!): [PlayerGame]
     matchInfo(
@@ -109,6 +125,7 @@ const typeDefs = gql`
     ): [MatchesInfo]
     playerId(region: String!, playerName: String!): ID!
     leaderboards(gameMode: String!, count: Int!): [Players!]!
+    telemetry(url: String!, user: String!): Telemetry
     getSeasonStats(
       region: String!
       playerId: String!
@@ -120,6 +137,7 @@ const typeDefs = gql`
 const getMatchInfo = async ({ dataSources, region, matchId, playerId }) => {
   const matchInfo = await dataSources.pubgAPI.getMatch(region, matchId);
   const matchData = JSON.parse(matchInfo);
+
   const {
     included,
     data: {
@@ -132,6 +150,11 @@ const getMatchInfo = async ({ dataSources, region, matchId, playerId }) => {
 
   const [participantsList, rest] = partition(included, ['type', 'participant']);
   const rosters = head(partition(rest, ['type', 'roster']));
+  const test = head(partition(rest, ['type', 'asset']));
+
+  const {
+    attributes: { URL: telemetryUrl }
+  } = head(test);
 
   const participant = find(
     participantsList,
@@ -226,7 +249,8 @@ const getMatchInfo = async ({ dataSources, region, matchId, playerId }) => {
       mapName,
       teams,
       participants,
-      userRank
+      userRank,
+      telemetryUrl
     }
   };
 };
@@ -399,6 +423,31 @@ const resolvers = {
         );
         return item.attributes;
       });
+    },
+    telemetry: async (root, { url, user }, { dataSources }) => {
+      const information = await dataSources.pubgAPI.getTelemetryData(url);
+
+      const obj = information.filter(({ character, common }) =>
+        character && common
+          ? character.name === user && common.isGame > 0.5
+          : false
+      );
+
+      const locations = obj.map(item => {
+        const { x, y, z } = item.character.location;
+        return {
+          x: parseInt(x / 1000, 10),
+          y: parseInt(y / 1000, 10),
+          z: parseInt(z, 10)
+        };
+      });
+
+      return {
+        Coordinates: {
+          Id: user,
+          Coords: locations
+        }
+      };
     },
     matchesInfo: async (
       root,

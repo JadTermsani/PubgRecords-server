@@ -1,11 +1,11 @@
 require('dotenv').config({ path: '.env' });
 const express = require('express');
 const app = express();
-const axios = require('axios');
 const cors = require('cors');
-const { resolvers, typeDefs } = require('./schema');
 const { ApolloServer } = require('apollo-server-express');
-const PubgAPI = require('./pubg-api');
+
+const { resolvers, typeDefs } = require('./src/schema');
+const PubgAPI = require('./src/endpoints');
 
 const server = new ApolloServer({
   typeDefs,
@@ -15,8 +15,6 @@ const server = new ApolloServer({
 });
 
 server.applyMiddleware({ app, path: '/api/graphql' });
-
-const API_KEY = process.env.API_KEY;
 
 // enable CORS for cross-browser support
 app.use(function(req, res, next) {
@@ -34,97 +32,9 @@ app.options('*', cors());
 app.use(express.static('public'));
 app.use('/', express.static(`${__dirname}/build`));
 
-// make sure server is running
+// make sure server is running online
 app.get('/', function(req, res) {
   res.send({ status: 'online', owner: 'Jad Termsani', code: 200 });
-});
-
-// for robots.txt
-app.get('/robots.txt', function(req, res) {
-  res.type('text/plain');
-  res.send('User-agent: *\nDisallow: /');
-});
-
-// check the pubg api status
-app.get('/status/', function(req, res) {
-  axios
-    .get('https://api.playbattlegrounds.com/status', {
-      headers: {
-        Accept: 'application/vnd.api+json'
-      }
-    })
-    .then(() => {
-      res.send({ status: 'online', code: 200 });
-    })
-    .catch(error => {
-      console.log(error);
-    });
-});
-
-// get a player's games played
-app.get('/player/:region/:player', function(req, res) {
-  axios
-    .get(
-      `https://api.playbattlegrounds.com/shards/${
-        req.params.region
-      }/players?filter[playerNames]=${player}`,
-      {
-        headers: {
-          Authorization: `Bearer ${API_KEY}`,
-          Accept: 'application/vnd.api+json'
-        }
-      }
-    )
-    .then(response => {
-      res.send(response.data);
-    })
-    .catch(error => {
-      res.sendStatus(error.response.status);
-    });
-});
-
-// get single match details
-app.get('/match/:region/:matchId', function(req, res) {
-  axios
-    .get(
-      `https://api.playbattlegrounds.com/shards/${req.params.region}/matches/${
-        req.params.matchId
-      }`,
-      {
-        headers: {
-          Authorization: `Bearer ${API_KEY}`,
-          Accept: 'application/vnd.api+json'
-        }
-      }
-    )
-    .then(response => {
-      res.send(response.data);
-    })
-    .catch(error => {
-      res.sendStatus(error.response.status);
-    });
-});
-
-// get seasonal stats
-app.get('/season/:region/:playerId/:season', function(req, res) {
-  axios
-    .get(
-      `https://api.playbattlegrounds.com/shards/${req.params.region}/players/${
-        req.params.playerId
-      }/seasons/${req.params.season}`,
-      {
-        headers: {
-          Authorization: `Bearer ${API_KEY}`,
-          Accept: 'application/vnd.api+json'
-        }
-      }
-    )
-    .then(response => {
-      res.send(response.data);
-    })
-    .catch(error => {
-      res.sendStatus(error.response.status);
-    });
 });
 
 // verify server is running

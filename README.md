@@ -8,7 +8,7 @@ This server is currently deployed on [heroku](https://pubgrecords-graphql.heroku
 
 - Web App: [PubgRecords.com](https://www.pubgrecords.com)
 
-- Android App: 
+- Android App:
   <a href='https://play.google.com/store/apps/details?id=com.pubgrecords&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' width="170" height="80" src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
 
 ## To run locally :computer:
@@ -345,15 +345,20 @@ Results are ordered by player rank
 The coordinates represent the player's movement from the moment the player lands until his death (or victory).
 The query requires a `telemetry url` and a `username` of a participant of this match.
 
-#### Get the coordinates of a single user
+**NOTE**
+The coordinates provided by the PUBG API are for a canvas of size 816,000 x 816,000.
+
+#### Get the coordinates of single or multiple players of a game
 
 ```graphql
 query {
   telemetry(
-    url: "https://telemetry-cdn.playbattlegrounds.com/bluehole-pubg/pc-eu-telemetry.json",
-    user:"JadT26"
+    # Replace with your telemetry URL
+    url: "https://telemetry-cdn.playbattlegrounds.com/bluehole-pubg/pc-eu/telemetry.json"
+    users: "JadT26"
+    # users: ["JadT26", "sgusss"]
   ) {
-     Coordinates{
+    Coordinates {
       Id
       Coords {
         x
@@ -365,7 +370,7 @@ query {
 }
 ```
 
-Response
+Response of a single player: 
 
 ```json
 {

@@ -346,17 +346,17 @@ The coordinates represent the player's movement from the moment the player lands
 The query requires a `telemetry url` and a `username` of a participant of this match.
 
 **NOTE**
-The coordinates provided by the PUBG API are for a canvas of size 816,000 x 816,000.
+The coordinates provided by the PUBG API are for a canvas of size 816,000 x 816,000. I translated the data so that it could be mapped on a 816 x 816 canvas. So feel free to maniulate the numbers and scale them accordingly.
 
 #### Get the coordinates of single or multiple players of a game
 
 ```graphql
 query {
   telemetry(
-    # Replace with your telemetry URL
+    # Replace the url with your telemetry URL
     url: "https://telemetry-cdn.playbattlegrounds.com/bluehole-pubg/pc-eu/telemetry.json"
     users: "JadT26"
-    # users: ["JadT26", "sgusss"]
+    # users: ["JadT26", "sguss"]
   ) {
     Coordinates {
       Id

@@ -1,4 +1,4 @@
-const getCoordinates = (information, users) => {
+const getCoordinates = (information, users, scale) => {
   const coordinates = users.map(user => {
     const Arr = information.filter(({ character, common }) =>
       character && common
@@ -8,11 +8,19 @@ const getCoordinates = (information, users) => {
 
     const locations = Arr.map(item => {
       const { x, y, z } = item.character.location;
-      return {
-        x: parseInt(x / 1000, 10),
-        y: parseInt(y / 1000, 10),
-        z: parseInt(z, 10)
-      };
+      if (scale) {
+        return {
+          x: parseInt(x / scale, 10),
+          y: parseInt(y / scale, 10),
+          z: parseInt(z, 10)
+        };
+      } else {
+        return {
+          x: parseInt(x, 10),
+          y: parseInt(y, 10),
+          z: parseInt(z, 10)
+        };
+      }
     });
 
     return {

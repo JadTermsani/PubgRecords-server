@@ -50,10 +50,10 @@ const resolvers = {
       return getLeaderboards(information, count);
     },
 
-    telemetry: async (root, { url, users }, { dataSources }) => {
+    telemetry: async (root, { url, users, scale }, { dataSources }) => {
       const information = await dataSources.pubgAPI.getTelemetryData(url);
 
-      const coordinates = getCoordinates(information, users);
+      const coordinates = getCoordinates(information, users, scale);
 
       return {
         Coordinates: coordinates

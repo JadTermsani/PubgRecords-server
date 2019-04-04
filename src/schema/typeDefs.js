@@ -103,19 +103,25 @@ const typeDefs = gql`
 
   type Query {
     playerGames(region: String!, playerName: String!): [PlayerGame]
+
     matchInfo(
       region: String!
       matchId: [String!]!
       playerId: String!
     ): MatchesInfo
+
     matchesInfo(
       region: String!
       matchesId: [String!]!
       playerId: String!
     ): [MatchesInfo]
+
     playerId(region: String!, playerName: String!): ID!
+
     leaderboards(gameMode: String!, count: Int!): [Players!]!
-    telemetry(url: String!, users: [String!]): Telemetry
+
+    telemetry(url: String!, users: [String!], scale: Int): Telemetry
+
     getSeasonStats(
       region: String!
       playerId: String!

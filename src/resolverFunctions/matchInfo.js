@@ -42,6 +42,8 @@ const getMatchInfo = async (dataSources, region, matchId, playerId) => {
     }) => !!find(teamIds, ({ id }) => id === participantId)
   ).relationships.participants.data;
 
+  let team = [];
+
   const teamStats = filter(
     participantsList,
     ({ id }) => !!find(teamIds, ({ id: teamId }) => teamId === id)
@@ -79,6 +81,9 @@ const getMatchInfo = async (dataSources, region, matchId, playerId) => {
     const walkDistance = parseInt(walkingDistance, 10);
     const timeSurvived = parseInt(timeAlive / 60, 10);
     matchDuration = parseInt(duration / 60, 10);
+
+    team.push(name);
+
     teams = rosters.length;
     participants = participantsList.length;
     userRank = rank;
@@ -101,7 +106,8 @@ const getMatchInfo = async (dataSources, region, matchId, playerId) => {
       teamKills,
       vehiclesDestroyed,
       walkDistance,
-      timeSurvived
+      timeSurvived,
+      team
     };
   });
 
@@ -116,7 +122,8 @@ const getMatchInfo = async (dataSources, region, matchId, playerId) => {
       teams,
       participants,
       userRank,
-      telemetryUrl
+      telemetryUrl,
+      team
     }
   };
 };

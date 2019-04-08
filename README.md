@@ -133,6 +133,7 @@ query {
       mapName
       matchDuration (minutes)
       participants
+      team
       teams
       telemetryUrl
       time (HH:MM:SS)
@@ -199,6 +200,7 @@ Result (of a single match):
           "mapName": "Erangel_Main",
           "matchDuration": 31,
           "participants": 87,
+          "team": ["JadT26", "sguss"],
           "teams": 44,
           "telemetryUrl": "https://telemetry-cdn.playbattlegrounds.com/bluehole-pubg/pc-eu/2019/03/23/14/11/8a691612-4d75-11e9-ad4d-0a586463690a-telemetry.json",
           "time": "20:35:47",
@@ -344,9 +346,11 @@ Results are ordered by player rank
 
 The coordinates represent the player's movement from the moment the player lands until his death (or victory).
 The query requires a `telemetry url` and a `username` of a participant of this match.
+The `scale` parameter is optional and you can use it to return the coordinated scaled to your preference.
 
-**NOTE**
-The coordinates provided by the PUBG API are for a canvas of size 816,000 x 816,000. I translated the data so that it could be mapped on a 816 x 816 canvas. So feel free to maniulate the numbers and scale them accordingly.
+#### Scale Example:
+
+Erangel is 816000 x 816000 and I want to scale the coordinates to be translated on a 408x408 px canvas. To achieve this, I add a `scale` parameter to the query and give it a value of 2500.
 
 #### Get the coordinates of single or multiple players of a game
 
@@ -357,6 +361,7 @@ query {
     url: "https://telemetry-cdn.playbattlegrounds.com/bluehole-pubg/pc-eu/telemetry.json"
     users: "JadT26"
     # users: ["JadT26", "sguss"]
+    scale: 2500
   ) {
     Coordinates {
       Id
@@ -370,7 +375,7 @@ query {
 }
 ```
 
-Response of a single player: 
+Response of a single player:
 
 ```json
 {

@@ -1,3 +1,5 @@
+const { uniqWith, isEqual } = require('lodash');
+
 const getCoordinates = (information, users, scale) => {
   const coordinates = users.map(user => {
     const Arr = information.filter(({ character, common }) =>
@@ -23,9 +25,11 @@ const getCoordinates = (information, users, scale) => {
       }
     });
 
+    const uniqueLocations = uniqWith(locations, isEqual);
+
     return {
       Id: user,
-      Coords: locations
+      Coords: uniqueLocations
     };
   });
 

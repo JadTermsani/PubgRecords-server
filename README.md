@@ -8,9 +8,6 @@ This server is currently deployed on [heroku](https://pubgrecords-graphql.heroku
 
 - Web App: [PubgRecords.com](https://www.pubgrecords.com)
 
-- Android App:
-  <a href='https://play.google.com/store/apps/details?id=com.pubgrecords&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' width="170" height="80" src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
-
 ## To run locally :computer:
 
 Install dependencies

@@ -22,6 +22,7 @@ const typeDefs = gql`
     userRank: Int
     telemetryUrl: String
     team: [String]
+    matchId: String
   }
 
   type PlayerInfo {

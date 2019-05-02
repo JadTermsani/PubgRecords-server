@@ -123,7 +123,8 @@ const getMatchInfo = async (dataSources, region, matchId, playerId) => {
       participants,
       userRank,
       telemetryUrl,
-      team
+      team,
+      matchId
     }
   };
 };

@@ -4,7 +4,8 @@ const {
   getSeasonStats,
   getLeaderboards,
   getCoordinates,
-  getMatchInfo
+  getMatchInfo,
+  getLifetimeStats
 } = require('../resolverFunctions');
 
 const resolvers = {
@@ -42,6 +43,14 @@ const resolvers = {
       );
 
       return getSeasonStats(information);
+    },
+
+    getLifetimeStats: async (root, { region, playerId }, { dataSources }) => {
+      const information = await dataSources.pubgAPI.getLifetimeStats(
+        region,
+        playerId
+      );
+      return getLifetimeStats(information);
     },
 
     leaderboards: async (root, { gameMode, count }, { dataSources }) => {

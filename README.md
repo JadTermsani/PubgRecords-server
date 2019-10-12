@@ -201,8 +201,7 @@ Result (of a single match):
           "teams": 44,
           "telemetryUrl": "https://telemetry-cdn.playbattlegrounds.com/bluehole-pubg/pc-eu/2019/03/23/14/11/8a691612-4d75-11e9-ad4d-0a586463690a-telemetry.json",
           "time": "20:35:47",
-          "userRank": 9,
-
+          "userRank": 9
         }
       }
     ]
@@ -269,6 +268,79 @@ Result:
       "top10s": 16,
       "vehiclesDestroyed": 0,
       "wins": 1
+    }
+  }
+}
+```
+
+#### Get the Lifetime stats for a given player
+
+Query:
+
+```graphql
+query {
+  getLifetimeStats(
+    region: "steam"
+    playerId: "account.c04b3561ec5442c9bb52433648482b65"
+  ) {
+    assists
+    damage
+    dBNOs
+    deaths
+    drivingDistance (meters)
+    headshotKills
+    heals
+    kdRatio
+    kills
+    longestGame (minutes)
+    longestKill (meters)
+    revives
+    roadKills
+    roundMostKills
+    rounds
+    runningDistance (meters)
+    suicides
+    swimDistance (meters)
+    teamKills
+    timePlayed (minutes)
+    top10s
+    vehiclesDestroyed
+    weaponsAcquired
+    wins
+  }
+}
+```
+
+Result:
+
+```json
+{
+  "data": {
+    "getLifetimeStats": {
+      "assists": 98,
+      "damage": 39734,
+      "dBNOs": 205,
+      "deaths": 507,
+      "drivingDistance": 314073,
+      "headshotKills": 62,
+      "heals": 980,
+      "kdRatio": 0.49,
+      "kills": 246,
+      "longestGame": 31,
+      "longestKill": 413.64,
+      "revives": 109,
+      "roadKills": 2,
+      "roundMostKills": 6,
+      "rounds": 512,
+      "runningDistance": 354559,
+      "suicides": 11,
+      "swimDistance": 1935,
+      "teamKills": 15,
+      "timePlayed": 4453,
+      "top10s": 73,
+      "vehiclesDestroyed": 0,
+      "weaponsAcquired": 1377,
+      "wins": 6
     }
   }
 }

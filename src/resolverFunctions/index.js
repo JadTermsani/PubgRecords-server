@@ -4,6 +4,7 @@ const { getMatchInfo } = require('./matchInfo');
 const { getSeasonStats } = require('./getSeasonStats');
 const { getLeaderboards } = require('./leaderboards');
 const { getCoordinates } = require('./telemetry');
+const { getLifetimeStats } = require('./getLifetimeStats');
 
 module.exports = {
   getPlayerId,
@@ -11,5 +12,6 @@ module.exports = {
   getMatchInfo,
   getSeasonStats,
   getLeaderboards,
-  getCoordinates
+  getCoordinates,
+  getLifetimeStats
 };

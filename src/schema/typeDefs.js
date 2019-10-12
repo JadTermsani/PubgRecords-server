@@ -70,6 +70,33 @@ const typeDefs = gql`
     longestGame: Int
   }
 
+  type LifetimeStats {
+    assists: Int
+    heals: Int
+    kills: Int
+    dBNOs: Int
+    deaths: Int
+    damage: Int
+    headshotKills: Int
+    longestKill: Float
+    longestGame: Int
+    revives: Int
+    roadKills: Int
+    roundMostKills: Int
+    rounds: Int
+    suicides: Int
+    runningDistance: Int
+    swimDistance: Int
+    drivingDistance: Int
+    teamKills: Int
+    timePlayed: Int
+    top10s: Int
+    vehiclesDestroyed: Int
+    weaponsAcquired: Int
+    wins: Int
+    kdRatio: Float
+  }
+
   type Players {
     name: String
     rank: Int
@@ -129,6 +156,8 @@ const typeDefs = gql`
       playerId: String!
       season: String!
     ): SeasonStats
+
+    getLifetimeStats(region: String!, playerId: String!): LifetimeStats
   }
 `;
 

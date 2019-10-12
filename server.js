@@ -11,7 +11,8 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   dataSources: () => ({ pubgAPI: new PubgAPI() }),
-  introspection: true
+  introspection: true,
+  playground: true
 });
 
 server.applyMiddleware({ app, path: '/api/graphql' });

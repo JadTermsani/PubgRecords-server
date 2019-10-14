@@ -29,6 +29,10 @@ module.exports = class PubgAPI extends RESTDataSource {
     return this.get(`/shards/${region}/players/${playerId}/seasons/lifetime`);
   }
 
+  async getWeaponMastery(region, playerId) {
+    return this.get(`/shards/${region}/players/${playerId}/weapon_mastery`);
+  }
+
   async getLeaderboards(gameMode) {
     return this.get(`/shards/steam/leaderboards/${gameMode}?page[number]=0`);
   }

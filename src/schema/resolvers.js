@@ -5,7 +5,8 @@ const {
   getLeaderboards,
   getCoordinates,
   getMatchInfo,
-  getLifetimeStats
+  getLifetimeStats,
+  getWeaponMastery
 } = require('../resolverFunctions');
 
 const resolvers = {
@@ -51,6 +52,14 @@ const resolvers = {
         playerId
       );
       return getLifetimeStats(information);
+    },
+
+    weaponMastery: async (root, { region, playerId }, { dataSources }) => {
+      const information = await dataSources.pubgAPI.getWeaponMastery(
+        region,
+        playerId
+      );
+      return getWeaponMastery(information);
     },
 
     leaderboards: async (root, { gameMode, count }, { dataSources }) => {

@@ -6,9 +6,29 @@
 
 This server is currently deployed on [heroku](https://pubgrecords-graphql.herokuapp.com/api/graphql) and serves as a proxy between the [PUBG API](https://documentation.playbattlegrounds.com/en/introduction.html) and both Pubg Records Apps:
 
-- Web App: [PubgRecords.com](https://www.pubgrecords.com)
+Web App: [PubgRecords.com](https://www.pubgrecords.com)
 
-## To run locally :computer:
+## Table of Contents
+
+- [pubgrecords.com GraphQL server](#pubgrecordscom-graphql-server)
+  - [Table of Contents](#table-of-contents)
+  - [Run locally :computer:](#run-locally-computer)
+  - [Test using the GraphQL interface](#test-using-the-graphql-interface)
+    - [Query examples](#query-examples)
+      - [Player ID](#player-id)
+      - [All match IDs for a given player](#all-match-ids-for-a-given-player)
+      - [Match Details for 1 or more matches](#match-details-for-1-or-more-matches)
+      - [Seasonal stats for a given player](#seasonal-stats-for-a-given-player)
+      - [Lifetime stats for a given player](#lifetime-stats-for-a-given-player)
+      - [Weapon Mastery for a given player](#weapon-mastery-for-a-given-player)
+      - [Leaderboards](#leaderboards)
+  - [Telemetry data :tada:](#telemetry-data-tada)
+    - [Coordinates](#coordinates)
+      - [Scale Example](#scale-example)
+      - [Get the coordinates of single or multiple players of a game](#get-the-coordinates-of-single-or-multiple-players-of-a-game)
+  - [Contributors](#contributors)
+
+## Run locally :computer:
 
 Install dependencies
 
@@ -26,19 +46,19 @@ yarn dev
 
 Go to http://localhost:3001/
 
-## To test using the GraphQL interface
+## Test using the GraphQL interface
 
 - Locally :computer: :
 
 After starting the server, go to http://localhost:3001/api/graphql to launch it.
 
-- On the Web :earth_asia: :
+- Online :earth_asia: :
 
 Go to https://pubgrecords-graphql.herokuapp.com/api/graphql
 
-### Query examples:
+### Query examples
 
-#### Get a player ID:
+#### Player ID
 
 Query:
 
@@ -58,7 +78,7 @@ Result:
 }
 ```
 
-#### Get all match IDs for a given player:
+#### All match IDs for a given player
 
 Query:
 
@@ -91,7 +111,7 @@ Result:
 }
 ```
 
-#### Get the details of 1 or more matches for a given player:
+#### Match Details for 1 or more matches
 
 Query:
 
@@ -209,7 +229,7 @@ Result (of a single match):
 }
 ```
 
-#### Get the seasonal stats for a given player
+#### Seasonal stats for a given player
 
 Query:
 
@@ -273,7 +293,7 @@ Result:
 }
 ```
 
-#### Get the Lifetime stats for a given player
+#### Lifetime stats for a given player
 
 Query:
 
@@ -346,7 +366,116 @@ Result:
 }
 ```
 
-#### Get the Leaderboards
+#### Weapon Mastery for a given player
+
+Query:
+
+```graphql
+query {
+  weaponMastery(
+    region: "steam"
+    playerId: "account.c04b3561ec5442c9bb52433648482b65"
+  ) {
+    name
+    stats {
+      damage
+      defeats
+      headshots
+      kills
+      knocks
+      levelCurrent
+      longRangeKills
+      longestKill
+      roundMostDamage
+      roundMostDefeats
+      roundMostHeadshots
+      roundMostKills
+      roundMostKnocks
+      tierCurrent
+      xpTotal
+    }
+    medals {
+      count
+      medalId
+    }
+  }
+}
+```
+
+Result:
+
+```json
+{
+  "data": {
+    "weaponMastery": [
+      {
+        "name": "Item_Weapon_AK47_C",
+        "stats": {
+          "damage": 2353.9,
+          "defeats": 19,
+          "headshots": 14,
+          "kills": 12,
+          "knocks": 14,
+          "levelCurrent": 10,
+          "longRangeKills": 0,
+          "longestKill": 50.36,
+          "roundMostDamage": 407.51,
+          "roundMostDefeats": 3,
+          "roundMostHeadshots": 3,
+          "roundMostKills": 2,
+          "roundMostKnocks": 3,
+          "tierCurrent": 2,
+          "xpTotal": 50790
+        },
+        "medals": [
+          {
+            "count": 6,
+            "medalId": "MedalDeadeye"
+          },
+          {
+            "count": 5,
+            "medalId": "MedalAssassin"
+          },
+          {
+            "count": 2,
+            "medalId": "MedalPunisher"
+          }
+        ]
+      },
+      {
+        "name": "Item_Weapon_AUG_C",
+        "stats": {
+          "damage": 283.33,
+          "defeats": 1,
+          "headshots": 1,
+          "kills": 0,
+          "knocks": 1,
+          "levelCurrent": 2,
+          "longRangeKills": 0,
+          "longestKill": 28.1,
+          "roundMostDamage": 151.72,
+          "roundMostDefeats": 1,
+          "roundMostHeadshots": 1,
+          "roundMostKills": 0,
+          "roundMostKnocks": 1,
+          "tierCurrent": 1,
+          "xpTotal": 6142
+        },
+        "medals": [
+          {
+            "count": 1,
+            "medalId": "MedalDeadeye"
+          }
+        ]
+      },
+      ...
+      ...
+    ]
+  }
+}
+```
+
+#### Leaderboards
 
 Query:
 
@@ -417,7 +546,7 @@ The coordinates represent the player's movement from the moment the player lands
 The query requires a `telemetry url` and a `username` of a participant of this match.
 The `scale` parameter is optional and you can use it to return the coordinated scaled to your preference.
 
-#### Scale Example:
+#### Scale Example
 
 Erangel is 816000 x 816000 and I want to scale the coordinates to be translated on a 408x408 px canvas. To achieve this, I add a `scale` parameter to the query and give it a value of 2500.
 

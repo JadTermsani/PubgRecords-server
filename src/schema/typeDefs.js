@@ -130,6 +130,35 @@ const typeDefs = gql`
     z: Int
   }
 
+  type weaponStats {
+    kills: Int
+    defeats: Int
+    roundMostKills: Int
+    roundMostDamage: Float
+    damage: Float
+    headshots: Int
+    roundMostHeadshots: Int
+    knocks: Int
+    roundMostKnocks: Int
+    longRangeKills: Int
+    longestKill: Float
+    roundMostDefeats: Int
+    xpTotal: Int
+    levelCurrent: Int
+    tierCurrent: Int
+  }
+
+  type weaponMedals {
+    medalId: String
+    count: Int
+  }
+
+  type weaponMastery {
+    name: String
+    stats: weaponStats
+    medals: [weaponMedals]
+  }
+
   type Query {
     playerGames(region: String!, playerName: String!): [PlayerGame]
 
@@ -158,6 +187,7 @@ const typeDefs = gql`
     ): SeasonStats
 
     getLifetimeStats(region: String!, playerId: String!): LifetimeStats
+    weaponMastery(region: String!, playerId: String!): [weaponMastery]
   }
 `;
 

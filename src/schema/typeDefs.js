@@ -116,7 +116,9 @@ const typeDefs = gql`
   }
 
   type Telemetry {
-    Coordinates: [Coordinates]
+    playerCoords: [Coordinates]
+    safetyZoneCoords: [ZoneCoords]
+    redZoneCoords: [ZoneCoords]
   }
 
   type Coordinates {
@@ -128,6 +130,12 @@ const typeDefs = gql`
     x: Int
     y: Int
     z: Int
+  }
+
+  type ZoneCoords {
+    x: Float
+    y: Float
+    radius: Float
   }
 
   type weaponStats {

@@ -71,11 +71,7 @@ const resolvers = {
     telemetry: async (root, { url, users, scale }, { dataSources }) => {
       const information = await dataSources.pubgAPI.getTelemetryData(url);
 
-      const coordinates = getCoordinates(information, users, scale);
-
-      return {
-        Coordinates: coordinates
-      };
+      return getCoordinates(information, users, scale);
     },
 
     matchesInfo: async (

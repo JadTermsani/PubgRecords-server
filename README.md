@@ -25,7 +25,8 @@ Web App: [PubgRecords.com](https://www.pubgrecords.com)
   - [Telemetry data :tada:](#telemetry-data-tada)
     - [Coordinates](#coordinates)
       - [Scale Example](#scale-example)
-      - [Get the coordinates of single or multiple players of a game](#get-the-coordinates-of-single-or-multiple-players-of-a-game)
+      - [Player or Team](#player-or-team)
+      - [Safety and Red Zones](#safety-and-red-zones)
   - [Contributors](#contributors)
 
 ## Run locally :computer:
@@ -550,7 +551,7 @@ The `scale` parameter is optional and you can use it to return the coordinated s
 
 Erangel is 816000 x 816000 and I want to scale the coordinates to be translated on a 408x408 px canvas. To achieve this, I add a `scale` parameter to the query and give it a value of 2500.
 
-#### Get the coordinates of single or multiple players of a game
+#### Player or Team
 
 ```graphql
 query {
@@ -598,6 +599,63 @@ Response of a single player:
             "z": 1256
           },
           ...
+```
+
+#### Safety and Red Zones
+
+```graphql
+query {
+  telemetry(
+    # Replace the url with your telemetry URL
+    url: "https://telemetry-cdn.playbattlegrounds.com/bluehole-pubg/pc-eu/telemetry.json"
+    users: "JadT26"
+    # users: ["JadT26", "sguss"]
+    scale: 2500
+  ) {
+    safetyZoneCoords {
+      x
+      y
+      radius
+    }
+    redZoneCoords {
+      x
+      y
+      radius
+    }
+  }
+}
+```
+
+Response:
+
+```json
+{
+  "data": {
+    "telemetry": {
+      "safetyZoneCoords": [
+        {
+          "x": 234.6998125,
+          "y": 277.33684375,
+          "radius": 145.609578125
+        },
+        {
+          "x": 224.94015625,
+          "y": 289.24596875,
+          "radius": 101.926703125
+        },
+        ...
+      "redZoneCoords": [
+        {
+          "x": 234.6998125,
+          "y": 277.33684375,
+          "radius": 145.609578125
+        },
+        {
+          "x": 224.94015625,
+          "y": 289.24596875,
+          "radius": 101.926703125
+        },
+        ...
 ```
 
 ## Contributors

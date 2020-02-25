@@ -119,6 +119,7 @@ const typeDefs = gql`
     playerCoords: [Coordinates]
     safetyZoneCoords: [ZoneCoords]
     redZoneCoords: [ZoneCoords]
+    blackZoneCoords: [ZoneCoords]
   }
 
   type Coordinates {

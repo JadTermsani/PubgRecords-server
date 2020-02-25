@@ -26,7 +26,7 @@ Web App: [PubgRecords.com](https://www.pubgrecords.com)
     - [Coordinates](#coordinates)
       - [Scale Example](#scale-example)
       - [Player or Team](#player-or-team)
-      - [Safety and Red Zones](#safety-and-red-zones)
+      - [Safety, Red, and Black Zones](#safety-red-and-black-zones)
   - [Contributors](#contributors)
 
 ## Run locally :computer:
@@ -549,7 +549,19 @@ The `scale` parameter is optional and you can use it to return the coordinated s
 
 #### Scale Example
 
-Erangel is 816000 x 816000 and I want to scale the coordinates to be translated on a 408x408 px canvas. To achieve this, I add a `scale` parameter to the query and give it a value of 2500.
+Erangel is 816000 x 816000 and I want to scale the coordinates to be translated on a 408x408 px canvas. To achieve this, I add a `scale` parameter to the query and give it a value of 2000.
+
+Scales to fit a 408x408 px canvas:
+
+```js
+{
+  Erangel: 2000,
+  Miramar: 2000,
+  Sanhok: 1000,
+  Vikendi: 1500,
+  Karakin: 500
+}
+```
 
 #### Player or Team
 
@@ -557,12 +569,12 @@ Erangel is 816000 x 816000 and I want to scale the coordinates to be translated 
 query {
   telemetry(
     # Replace the url with your telemetry URL
-    url: "https://telemetry-cdn.playbattlegrounds.com/bluehole-pubg/pc-eu/telemetry.json"
+    url: "https://telemetry-cdn.playbattlegrounds.com/bluehole-pubg/steam/2020-telemetry.json"
     users: "JadT26"
     # users: ["JadT26", "sguss"]
-    scale: 2500
+    scale: 2000
   ) {
-    Coordinates {
+    playerCoords {
       Id
       Coords {
         x
@@ -580,28 +592,24 @@ Response of a single player:
 {
   "data": {
     "telemetry": {
-      "Coordinates": {
-        "Id": "JadT26",
-        "Coords": [
-          {
-            "x": 202,
-            "y": 292,
-            "z": 1256
-          },
-          {
-            "x": 199,
-            "y": 292,
-            "z": 1256
-          },
-          {
-            "x": 199,
-            "y": 292,
-            "z": 1256
-          },
+      "playerCoords": [
+        {
+          "Id": "JadT26",
+          "Coords": [
+            {
+              "x": 215,
+              "y": 333,
+              "z": 1255
+            },
+            {
+              "x": 215,
+              "y": 333,
+              "z": 1255
+            },
           ...
 ```
 
-#### Safety and Red Zones
+#### Safety, Red, and Black Zones
 
 ```graphql
 query {
@@ -610,7 +618,7 @@ query {
     url: "https://telemetry-cdn.playbattlegrounds.com/bluehole-pubg/pc-eu/telemetry.json"
     users: "JadT26"
     # users: ["JadT26", "sguss"]
-    scale: 2500
+    scale: 500
   ) {
     safetyZoneCoords {
       x
@@ -618,6 +626,11 @@ query {
       radius
     }
     redZoneCoords {
+      x
+      y
+      radius
+    }
+    blackZoneCoords {
       x
       y
       radius
@@ -654,6 +667,18 @@ Response:
           "x": 224.94015625,
           "y": 289.24596875,
           "radius": 101.926703125
+        },
+        ...
+      "blackZoneCoords": [
+        {
+          "x": 124.6998125,
+          "y": 277.33684375,
+          "radius": 15
+        },
+        {
+          "x": 224.94015625,
+          "y": 289.24596875,
+          "radius": 15
         },
         ...
 ```

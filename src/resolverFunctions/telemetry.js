@@ -2,9 +2,16 @@ const { uniqBy } = require('lodash');
 
 const getCoordinates = (information, users, scale) => {
   const coordinates = users.map(user => {
+    const deathMatchFilter = information.filter(({ _T }) =>
+      _T ? _T === 'LogMatchDefinition' : false
+    );
+
+    const tdm = deathMatchFilter[0].MatchId.includes('tdm');
+
     const Arr = information.filter(({ character, common }) =>
       character && common
-        ? character.name === user && common.isGame > 0.5
+        ? character.name === user &&
+          (tdm ? common.isGame === 0 : common.isGame > 0.5)
         : false
     );
 
@@ -85,10 +92,38 @@ const getCoordinates = (information, users, scale) => {
       }
     });
 
+  const blackZoneCoords = information
+    .filter(({ gameState }) => {
+      if (gameState) {
+        if (gameState.blackZoneRadius === 0) {
+          return false;
+        } else return true;
+      } else return false;
+    })
+    .map(item => {
+      const { blackZoneRadius: bzr } = item.gameState;
+      const { x: bzx, y: bzy } = item.gameState.blackZonePosition;
+
+      if (scale) {
+        return {
+          x: bzx / scale,
+          y: bzy / scale,
+          radius: bzr / scale
+        };
+      } else {
+        return {
+          x: bzx,
+          y: bzy,
+          radius: bzr
+        };
+      }
+    });
+
   return {
     playerCoords: coordinates,
     safetyZoneCoords: uniqBy(safetyZoneCoords, 'x'),
-    redZoneCoords: uniqBy(redZoneCoords, 'x')
+    redZoneCoords: uniqBy(redZoneCoords, 'x'),
+    blackZoneCoords: uniqBy(blackZoneCoords, 'x')
   };
 };
 

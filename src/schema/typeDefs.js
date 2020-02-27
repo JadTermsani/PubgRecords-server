@@ -185,7 +185,7 @@ const typeDefs = gql`
 
     playerId(region: String!, playerName: String!): ID!
 
-    leaderboards(gameMode: String!, count: Int!): [Players!]!
+    leaderboards(gameMode: String!, count: Int!, season: String!): [Players!]!
 
     telemetry(url: String!, users: [String!], scale: Int): Telemetry
 

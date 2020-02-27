@@ -482,7 +482,12 @@ Query:
 
 ```graphql
 query {
-  leaderboards(gameMode: "duo", count: 50) {
+  leaderboards(
+    gameMode: "solo"
+    #gameMode: "solo-fpp"
+    count: 50
+    season: "division.bro.official.pc-2018-06"
+  ) {
     id
     name
     rank

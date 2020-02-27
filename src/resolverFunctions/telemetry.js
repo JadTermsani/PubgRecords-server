@@ -1,6 +1,6 @@
 const { uniqBy } = require('lodash');
 
-const getCoordinates = (information, users, scale) => {
+const getTelemetryData = (information, users, scale) => {
   const coordinates = users.map(user => {
     const deathMatchFilter = information.filter(({ _T }) =>
       _T ? _T === 'LogMatchDefinition' : false
@@ -128,5 +128,5 @@ const getCoordinates = (information, users, scale) => {
 };
 
 module.exports = {
-  getCoordinates
+  getTelemetryData
 };

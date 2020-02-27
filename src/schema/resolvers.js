@@ -3,7 +3,7 @@ const {
   getPlayerGames,
   getSeasonStats,
   getLeaderboards,
-  getCoordinates,
+  getTelemetryData,
   getMatchInfo,
   getLifetimeStats,
   getWeaponMastery
@@ -62,8 +62,15 @@ const resolvers = {
       return getWeaponMastery(information);
     },
 
-    leaderboards: async (root, { gameMode, count }, { dataSources }) => {
-      const information = await dataSources.pubgAPI.getLeaderboards(gameMode);
+    leaderboards: async (
+      root,
+      { gameMode, count, season },
+      { dataSources }
+    ) => {
+      const information = await dataSources.pubgAPI.getLeaderboards(
+        gameMode,
+        season
+      );
 
       return getLeaderboards(information, count);
     },
@@ -71,7 +78,7 @@ const resolvers = {
     telemetry: async (root, { url, users, scale }, { dataSources }) => {
       const information = await dataSources.pubgAPI.getTelemetryData(url);
 
-      return getCoordinates(information, users, scale);
+      return getTelemetryData(information, users, scale);
     },
 
     matchesInfo: async (

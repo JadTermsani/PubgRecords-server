@@ -3,7 +3,7 @@ const { getPlayerGames } = require('./playerGames');
 const { getMatchInfo } = require('./matchInfo');
 const { getSeasonStats } = require('./getSeasonStats');
 const { getLeaderboards } = require('./leaderboards');
-const { getCoordinates } = require('./telemetry');
+const { getTelemetryData } = require('./telemetry');
 const { getLifetimeStats } = require('./getLifetimeStats');
 const { getWeaponMastery } = require('./weaponMastery');
 
@@ -13,7 +13,7 @@ module.exports = {
   getMatchInfo,
   getSeasonStats,
   getLeaderboards,
-  getCoordinates,
+  getTelemetryData,
   getLifetimeStats,
   getWeaponMastery
 };

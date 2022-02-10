@@ -1027,7 +1027,7 @@ cssfilter@0.0.10:
   resolved "https://registry.yarnpkg.com/cssfilter/-/cssfilter-0.0.10.tgz#c6d2672632a2e5c83e013e6864a42ce8defd20ae"
   integrity sha1-xtJnJjKi5cg+AT5oZKQs6N79IK4=
 
-debug@2.6.9, debug@^2.2.0:
+debug@2.6.9:
   version "2.6.9"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
   dependencies:
@@ -2698,10 +2698,9 @@ typedarray-to-buffer@^3.1.5:
     is-typedarray "^1.0.0"
 
 undefsafe@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/undefsafe/-/undefsafe-2.0.2.tgz#225f6b9e0337663e0d8e7cfd686fc2836ccace76"
-  dependencies:
-    debug "^2.2.0"
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/undefsafe/-/undefsafe-2.0.5.tgz#38733b9327bdcd226db889fb723a6efd162e6e2c"
+  integrity sha512-WxONCrssBM8TSPRqN5EmsjVrsv4A8X12J4ArBiiayv3DyyG3ZlIg6yysuuSYdZsVz3TKcTg2fd//Ujd4CHV1iA==
 
 unique-string@^2.0.0:
   version "2.0.0"
